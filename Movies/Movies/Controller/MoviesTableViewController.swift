@@ -12,6 +12,9 @@ class MoviesTableViewController: UITableViewController {
 
     var movies = [Movie]()
     var selectedMovie: Movie?
+    let moviesProvider = MoviesFileDataProvider()
+    
+    @IBOutlet var emptyDataView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,15 +24,15 @@ class MoviesTableViewController: UITableViewController {
     
     // MARK: - Private methods
     private func loadMovies() {
-        guard let movieSet = NSDataAsset(name: "movies")?.data else {
-            return
-        }
-        do {
-            let jsonDecoder = JSONDecoder()
-            movies = try jsonDecoder.decode([Movie].self, from: movieSet)
-            self.tableView.reloadData()
-        } catch {
-            debugPrint(error)
+        moviesProvider.fetch {[weak self] error, movies in
+            if error != nil {
+                self?.movies = [Movie]()
+            } else if movies != nil {
+                self?.movies = movies!
+            } else {
+                self?.movies = [Movie]()
+            }
+            self?.tableView.reloadData()
         }
     }
     
@@ -46,6 +49,17 @@ extension MoviesTableViewController: UIGestureRecognizerDelegate {}
 
 // MARK: - Table view data source
 extension MoviesTableViewController {
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        var result = 1
+        self.tableView.backgroundView = nil
+        if movies.count == 0 {
+            self.tableView.backgroundView = self.emptyDataView
+            result = 0
+        }
+        return result
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return movies.count
     }

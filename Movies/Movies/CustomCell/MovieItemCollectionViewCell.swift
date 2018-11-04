@@ -8,7 +8,6 @@
 
 import UIKit
 
-@IBDesignable
 class MovieItemCollectionViewCell: UICollectionViewCell {
  
     static let cellIdentifier = "movieCell"

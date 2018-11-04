@@ -211,10 +211,31 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Lista de filmes" id="Nqi-lB-Sap"/>
                     <connections>
+                        <outlet property="emptyDataView" destination="EtS-l8-mQ0" id="0lc-bq-FNF"/>
                         <segue destination="OJ4-MY-JPd" kind="show" identifier="movieDetailSegue" id="o1k-fb-in7"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FOO-EM-1ah" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <view contentMode="scaleToFill" id="EtS-l8-mQ0">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="143"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nenhum filme encontrado" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fbk-Y4-SiJ">
+                            <rect key="frame" x="8" y="61" width="359" height="21"/>
+                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="Gjn-b6-3YK" firstAttribute="trailing" secondItem="Fbk-Y4-SiJ" secondAttribute="trailing" constant="8" id="A0u-rn-RiU"/>
+                        <constraint firstItem="Fbk-Y4-SiJ" firstAttribute="centerY" secondItem="Gjn-b6-3YK" secondAttribute="centerY" id="Ft7-td-zWc"/>
+                        <constraint firstItem="Fbk-Y4-SiJ" firstAttribute="centerX" secondItem="Gjn-b6-3YK" secondAttribute="centerX" id="GUS-NN-LJc"/>
+                        <constraint firstItem="Fbk-Y4-SiJ" firstAttribute="leading" secondItem="Gjn-b6-3YK" secondAttribute="leading" constant="8" id="qHL-pw-K9M"/>
+                    </constraints>
+                    <viewLayoutGuide key="safeArea" id="Gjn-b6-3YK"/>
+                </view>
             </objects>
             <point key="canvasLocation" x="1269.5999999999999" y="-564.46776611694156"/>
         </scene>
@@ -243,6 +264,13 @@
                                                     </mask>
                                                 </variation>
                                             </imageView>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qlu-no-ndV">
+                                                <rect key="frame" x="137.5" y="73.5" width="100" height="53"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="100" id="UEt-NB-WTA"/>
+                                                </constraints>
+                                                <state key="normal" image="play"/>
+                                            </button>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="gradient" translatesAutoresizingMaskIntoConstraints="NO" id="9pP-PV-zs0">
                                                 <rect key="frame" x="0.0" y="120" width="375" height="80"/>
                                                 <constraints>
@@ -320,6 +348,7 @@
                                             <constraint firstItem="xfO-XR-iif" firstAttribute="leading" secondItem="j2T-Fl-QJP" secondAttribute="leading" constant="16" id="ILb-tZ-ZeP"/>
                                             <constraint firstItem="j2T-Fl-QJP" firstAttribute="leading" secondItem="EEa-Ke-l2v" secondAttribute="leading" id="Ims-19-jjm"/>
                                             <constraint firstAttribute="trailing" secondItem="sJG-vK-e2A" secondAttribute="trailing" constant="8" id="QCS-4A-vB1"/>
+                                            <constraint firstItem="qlu-no-ndV" firstAttribute="centerX" secondItem="j2T-Fl-QJP" secondAttribute="centerX" id="Spf-6J-3ji"/>
                                             <constraint firstAttribute="trailing" secondItem="nZi-dg-Y0w" secondAttribute="trailing" constant="8" id="VNV-HW-fhj"/>
                                             <constraint firstAttribute="bottom" secondItem="nZi-dg-Y0w" secondAttribute="bottom" constant="215" id="XTC-7o-dX6">
                                                 <variation key="heightClass=compact" constant="8"/>
@@ -335,18 +364,19 @@
                                             <constraint firstItem="nZi-dg-Y0w" firstAttribute="leading" secondItem="j2T-Fl-QJP" secondAttribute="trailing" constant="85.5" id="ma0-fQ-QgG">
                                                 <variation key="heightClass=compact" constant="8"/>
                                             </constraint>
+                                            <constraint firstItem="qlu-no-ndV" firstAttribute="centerY" secondItem="j2T-Fl-QJP" secondAttribute="centerY" id="zNd-qT-I8A"/>
                                         </constraints>
                                         <variation key="default">
                                             <mask key="subviews">
                                                 <exclude reference="nZi-dg-Y0w"/>
                                             </mask>
                                             <mask key="constraints">
-                                                <exclude reference="aXn-8c-DdD"/>
-                                                <exclude reference="dOP-5B-78e"/>
                                                 <exclude reference="42L-3j-nZa"/>
                                                 <exclude reference="VNV-HW-fhj"/>
                                                 <exclude reference="XTC-7o-dX6"/>
                                                 <exclude reference="ma0-fQ-QgG"/>
+                                                <exclude reference="aXn-8c-DdD"/>
+                                                <exclude reference="dOP-5B-78e"/>
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=compact">
@@ -355,13 +385,13 @@
                                                 <exclude reference="sJG-vK-e2A"/>
                                             </mask>
                                             <mask key="constraints">
-                                                <exclude reference="F8v-Yy-HxQ"/>
-                                                <include reference="aXn-8c-DdD"/>
-                                                <include reference="dOP-5B-78e"/>
                                                 <include reference="42L-3j-nZa"/>
                                                 <include reference="VNV-HW-fhj"/>
                                                 <include reference="XTC-7o-dX6"/>
                                                 <include reference="ma0-fQ-QgG"/>
+                                                <exclude reference="F8v-Yy-HxQ"/>
+                                                <include reference="aXn-8c-DdD"/>
+                                                <include reference="dOP-5B-78e"/>
                                             </mask>
                                         </variation>
                                     </view>
@@ -416,5 +446,6 @@
         <image name="gradient-inverted" width="600" height="120"/>
         <image name="left-arrow" width="51.200000762939453" height="51.200000762939453"/>
         <image name="matrix" width="400" height="330"/>
+        <image name="play" width="53" height="53"/>
     </resources>
 </document>
