@@ -36,6 +36,25 @@ class MoviesTableViewController: UITableViewController {
         }
     }
     
+    private func confirmDelete(at indexPath: IndexPath) {
+        let movie = movies[indexPath.row]
+        let confirmActionSheet = UIAlertController(title: "Remover filme \(movie.title)?", message:nil, preferredStyle: UIAlertController.Style.actionSheet);
+        let deleteAction = UIAlertAction(title: "Remover", style: UIAlertAction.Style.destructive) {[weak self] action in
+            self?.movies.remove(at: indexPath.row)
+            self?.tableView.beginUpdates()
+            self?.tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.middle)
+            self?.tableView.endUpdates()
+           // self?.tableView.reloadData()
+        }
+        let dismissAction = UIAlertAction(title: "Cancelar", style: UIAlertAction.Style.default) { action in
+            self.dismiss(animated: true, completion: nil)
+        }
+        
+        confirmActionSheet.addAction(deleteAction)
+        confirmActionSheet.addAction(dismissAction)
+        self.present(confirmActionSheet, animated: true, completion: nil)
+    }
+    
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destVc = segue.destination as? MovieDetailViewController {
@@ -81,6 +100,23 @@ extension MoviesTableViewController {
         cell.detailTextLabel?.text = "Teste"
         return cell
     }
+    
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        let movie = movies[indexPath.row]
+        if movie.itemType == ItemType.movie {
+            return true
+        }
+        return false
+    }
+    
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        let deleteAction = UITableViewRowAction(style: UITableViewRowAction.Style.destructive, title: "Excluir") {[weak self] row, indexPath in
+            self?.confirmDelete(at: indexPath)
+        }
+        return [deleteAction]
+    }
+    
 }
 
 // MARK: - Table view delegate
