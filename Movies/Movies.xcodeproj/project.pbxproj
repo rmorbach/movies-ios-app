@@ -23,6 +23,8 @@
 		5E254087218F73D5008A14B6 /* MoviesDAO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E254086218F73D5008A14B6 /* MoviesDAO.swift */; };
 		5E254089218F745C008A14B6 /* DataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E254088218F745C008A14B6 /* DataProvider.swift */; };
 		5E25408B218F75B2008A14B6 /* MoviesFileDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E25408A218F75B2008A14B6 /* MoviesFileDataProvider.swift */; };
+		5E25408D218F85CC008A14B6 /* RatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E25408C218F85CC008A14B6 /* RatingView.swift */; };
+		5E25408F218FB791008A14B6 /* CustomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E25408E218FB791008A14B6 /* CustomView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +46,8 @@
 		5E254086218F73D5008A14B6 /* MoviesDAO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesDAO.swift; sourceTree = "<group>"; };
 		5E254088218F745C008A14B6 /* DataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProvider.swift; sourceTree = "<group>"; };
 		5E25408A218F75B2008A14B6 /* MoviesFileDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesFileDataProvider.swift; sourceTree = "<group>"; };
+		5E25408C218F85CC008A14B6 /* RatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingView.swift; sourceTree = "<group>"; };
+		5E25408E218FB791008A14B6 /* CustomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +109,8 @@
 			children = (
 				5E25405E218F2CF3008A14B6 /* Main.storyboard */,
 				5E254063218F2CF4008A14B6 /* LaunchScreen.storyboard */,
+				5E25408C218F85CC008A14B6 /* RatingView.swift */,
+				5E25408E218FB791008A14B6 /* CustomView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -244,10 +250,12 @@
 				5E254077218F3176008A14B6 /* MoviesTableViewController.swift in Sources */,
 				5E254075218F3136008A14B6 /* MoviesPromoTableViewCell.swift in Sources */,
 				5E25407B218F3458008A14B6 /* MovieItemCollectionViewCell.swift in Sources */,
+				5E25408F218FB791008A14B6 /* CustomView.swift in Sources */,
 				5E25408B218F75B2008A14B6 /* MoviesFileDataProvider.swift in Sources */,
 				5E25405D218F2CF3008A14B6 /* MovieDetailViewController.swift in Sources */,
 				5E25405B218F2CF3008A14B6 /* AppDelegate.swift in Sources */,
 				5E254089218F745C008A14B6 /* DataProvider.swift in Sources */,
+				5E25408D218F85CC008A14B6 /* RatingView.swift in Sources */,
 				5E254087218F73D5008A14B6 /* MoviesDAO.swift in Sources */,
 				5E254073218F3110008A14B6 /* Movie.swift in Sources */,
 				5E254082218F72D4008A14B6 /* CoreDataManager.swift in Sources */,

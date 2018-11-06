@@ -10,6 +10,7 @@ import UIKit
 
 class MovieTableViewCell: UITableViewCell {
 
+    //static let cellIdentifier = "movieRatingCell"
     static let cellIdentifier = "movieCell"
     
     // Mark: -  IBOutlets
@@ -18,6 +19,7 @@ class MovieTableViewCell: UITableViewCell {
     @IBOutlet weak var coverImageView: UIImageView!
     @IBOutlet weak var ratingLabel: UILabel!
     @IBOutlet weak var summaryLabel: UILabel!
+    @IBOutlet weak var ratingView: RatingView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -36,11 +38,15 @@ class MovieTableViewCell: UITableViewCell {
     public func prepareCell(movie: Movie) {
         self.titleLabel.text = movie.title
         self.summaryLabel.text = movie.summary
-        
-        self.ratingLabel.text = movie.formattedRating
+        if self.ratingLabel != nil {
+            self.ratingLabel.text = movie.formattedRating
+        }
         self.coverImageView.image = nil
         if movie.image != nil {
             self.coverImageView.image = UIImage(named: movie.image!)
+        }
+        if self.ratingView != nil {
+            self.ratingView.buildRating(value: movie.rating ?? 10.0)
         }
     }
     

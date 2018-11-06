@@ -10,11 +10,8 @@ import UIKit
 
 class MoviesFileDataProvider: DataProvider {
     
-    typealias T = Movie
-        
     let assetName = "movies"
-    let m: Movie? = nil
-    
+        
     func fetch(completion: (Error?, [Movie]?) -> Void) {
         guard let movieSet = NSDataAsset(name: assetName)?.data else {
             //TODO - 
