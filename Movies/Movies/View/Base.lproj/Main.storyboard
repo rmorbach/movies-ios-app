@@ -26,7 +26,6 @@
                         </textAttributes>
                         <textAttributes key="largeTitleTextAttributes">
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <offsetWrapper key="textShadowOffset" horizontal="0.0" vertical="0.0"/>
                         </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -292,9 +291,9 @@
                                                             <rect key="frame" x="0.0" y="0.0" width="109.5" height="40"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="⭐️⭐️⭐️⭐️⭐️" textAlignment="center" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JfE-Rv-obz">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="104" height="40"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="20" height="40"/>
                                                                     <constraints>
-                                                                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="104" id="AQP-AW-huR"/>
+                                                                        <constraint firstAttribute="width" constant="20" id="AQP-AW-huR"/>
                                                                     </constraints>
                                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                                                     <nil key="textColor"/>
@@ -303,7 +302,6 @@
                                                             </subviews>
                                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="trailing" secondItem="JfE-Rv-obz" secondAttribute="trailing" constant="6" id="8iX-ag-9wT"/>
                                                                 <constraint firstAttribute="bottom" secondItem="JfE-Rv-obz" secondAttribute="bottom" id="EtG-FH-F5K"/>
                                                                 <constraint firstItem="JfE-Rv-obz" firstAttribute="leading" secondItem="HvN-qm-5vA" secondAttribute="leading" id="VGs-hu-syV"/>
                                                                 <constraint firstItem="JfE-Rv-obz" firstAttribute="top" secondItem="HvN-qm-5vA" secondAttribute="top" id="n9e-sA-gRS"/>
@@ -326,7 +324,7 @@
                                                     <connections>
                                                         <outlet property="percentView" destination="HvN-qm-5vA" id="2Hy-dP-H3k"/>
                                                         <outlet property="ratingLabel" destination="JfE-Rv-obz" id="zyQ-es-DAl"/>
-                                                        <outlet property="trailingConstraint" destination="8iX-ag-9wT" id="gGP-KQ-YSf"/>
+                                                        <outlet property="widthContraint" destination="AQP-AW-huR" id="cKX-pM-VcV"/>
                                                     </connections>
                                                 </view>
                                             </subviews>
@@ -382,7 +380,7 @@
                             <outlet property="delegate" destination="3r1-Jd-KWZ" id="13D-lJ-bbR"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Lista de filmes" id="Nqi-lB-Sap">
+                    <navigationItem key="navigationItem" title="Lista de filmes" largeTitleDisplayMode="always" id="Nqi-lB-Sap">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="Ruy-xm-AzP">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <connections>

@@ -10,8 +10,8 @@ import UIKit
 
 class MovieTableViewCell: UITableViewCell {
 
-    //static let cellIdentifier = "movieRatingCell"
-    static let cellIdentifier = "movieCell"
+    static let cellIdentifier = "movieRatingCell"
+    //static let cellIdentifier = "movieCell"
     
     // Mark: -  IBOutlets
     

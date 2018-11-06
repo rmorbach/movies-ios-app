@@ -14,13 +14,12 @@ class RatingView: CustomView {
     // MARK - IBOutlets
     @IBOutlet var widthContraint: NSLayoutConstraint!
     @IBOutlet var percentView: UIView!
-    @IBOutlet var trailingConstraint: NSLayoutConstraint!
     @IBOutlet var ratingLabel: UILabel!
+    let labelMaxWidth = 104;
     
     public func buildRating(value: Double) {
-        let percentValue = 1 - (value * 1.0) / 10.0
-        let maxWidth = (self.ratingLabel.frame.size.width > self.ratingLabel.frame.size.height) ? self.ratingLabel.frame.size.width : self.ratingLabel.frame.size.height
-        self.trailingConstraint.constant = maxWidth * CGFloat(percentValue)
+        let newWidth = (value / 10.0) * CGFloat(labelMaxWidth)
+        self.widthContraint.constant = CGFloat(newWidth)
         self.layoutIfNeeded()
     }
     
