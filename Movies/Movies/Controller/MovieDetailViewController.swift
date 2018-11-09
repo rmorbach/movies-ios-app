@@ -46,11 +46,24 @@ class MovieDetailViewController: UIViewController {
         }
     }
 
+    // MARK: Navigation methods
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let destVc = segue.destination as? RegisterEditMovieViewController else {
+            return
+        }
+        destVc.editingMovie = self.movie
+    }
     
     // MARK: IBAction methods
     
     @IBAction func back(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
     }
+    
+    @IBAction func editMovie(_ sender: Any) {
+        self.performSegue(withIdentifier: "editMovieSegue", sender: nil)
+    }
+    
+    
 }
 

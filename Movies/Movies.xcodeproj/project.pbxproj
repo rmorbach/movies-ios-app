@@ -25,6 +25,7 @@
 		5E25408B218F75B2008A14B6 /* MoviesFileDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E25408A218F75B2008A14B6 /* MoviesFileDataProvider.swift */; };
 		5E25408D218F85CC008A14B6 /* RatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E25408C218F85CC008A14B6 /* RatingView.swift */; };
 		5E25408F218FB791008A14B6 /* CustomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E25408E218FB791008A14B6 /* CustomView.swift */; };
+		5EC4231521925AD900913A49 /* RegisterEditMovieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC4231421925AD900913A49 /* RegisterEditMovieViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		5E25408A218F75B2008A14B6 /* MoviesFileDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesFileDataProvider.swift; sourceTree = "<group>"; };
 		5E25408C218F85CC008A14B6 /* RatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingView.swift; sourceTree = "<group>"; };
 		5E25408E218FB791008A14B6 /* CustomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomView.swift; sourceTree = "<group>"; };
+		5EC4231421925AD900913A49 /* RegisterEditMovieViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterEditMovieViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +141,7 @@
 				5E25405C218F2CF3008A14B6 /* MovieDetailViewController.swift */,
 				5E254076218F3176008A14B6 /* MoviesTableViewController.swift */,
 				5E25408A218F75B2008A14B6 /* MoviesFileDataProvider.swift */,
+				5EC4231421925AD900913A49 /* RegisterEditMovieViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -260,6 +263,7 @@
 				5E254073218F3110008A14B6 /* Movie.swift in Sources */,
 				5E254082218F72D4008A14B6 /* CoreDataManager.swift in Sources */,
 				5E254080218F71E3008A14B6 /* Movies.xcdatamodeld in Sources */,
+				5EC4231521925AD900913A49 /* RegisterEditMovieViewController.swift in Sources */,
 				5E254070218F30FA008A14B6 /* MovieTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
