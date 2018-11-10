@@ -1,0 +1,4 @@
+- Create separate entites: Categories and movies in CoreData
+- Schedule local notifications to watch a given movie
+- Define primary color of the whole app in settings bundle
+- Use switch for autoplay when trailer has finished downloaded
