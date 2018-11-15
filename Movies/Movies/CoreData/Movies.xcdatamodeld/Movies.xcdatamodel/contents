@@ -12,10 +12,9 @@
         <attribute name="summary" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="categories" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Category" inverseName="movies" inverseEntity="Category" syncable="YES"/>
-        <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Movie" inverseName="items" inverseEntity="Movie" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Movie" positionX="-925.90234375" positionY="-3287.3359375" width="128" height="165"/>
+        <element name="Movie" positionX="-925.90234375" positionY="-3287.3359375" width="128" height="150"/>
         <element name="Category" positionX="-909" positionY="-3222" width="128" height="75"/>
     </elements>
 </model>

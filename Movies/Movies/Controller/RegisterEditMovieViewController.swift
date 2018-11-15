@@ -399,9 +399,9 @@ extension RegisterEditMovieViewController: UIPickerViewDataSource, UIPickerViewD
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         if pickerView == self.hourPickerView {
-            self.durationHoursTextField.text = "\(row + 1)"
+            self.durationHoursTextField.text = "\(row)"
         } else {
-            self.durationMinutesTextField.text = "\(row + 1)"
+            self.durationMinutesTextField.text = "\(row)"
         }
     }
 }

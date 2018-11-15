@@ -44,12 +44,12 @@ class MoviesTableViewController: UITableViewController {
         guard let movie = self.fetchedResultController?.object(at: indexPath) else {
             return
         }
-        let confirmActionSheet = UIAlertController(title: "Remover filme \(movie.title)?", message:nil, preferredStyle: UIAlertController.Style.actionSheet);
+        let confirmActionSheet = UIAlertController(title: "Remover filme \(movie.title!)?", message:nil, preferredStyle: UIAlertController.Style.actionSheet);
         let deleteAction = UIAlertAction(title: "Remover", style: UIAlertAction.Style.destructive) {[weak self] action in
+//            self?.tableView.beginUpdates()
+//            self?.tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.middle)
+//            self?.tableView.endUpdates()
             self?.context.delete(movie)
-            self?.tableView.beginUpdates()
-            self?.tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.middle)
-            self?.tableView.endUpdates()
         }
         let dismissAction = UIAlertAction(title: "Cancelar", style: UIAlertAction.Style.default) { action in
             self.dismiss(animated: true, completion: nil)

@@ -33,11 +33,7 @@ class MoviesPromoTableViewCell: UITableViewCell {
     
     // MARK: - Public methods
     public func prepareCell(movie: Movie) {
-        if movie.items != nil && movie.items!.count > 0 {
-            guard let mvs = movie.items as? Set<Movie> else { return }
-            movies = Array<Movie>(mvs)
-            moviesCollectionView.reloadData()
-        }
+       
     }
 
 }
