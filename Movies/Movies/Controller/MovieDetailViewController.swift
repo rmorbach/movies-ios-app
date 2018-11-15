@@ -24,15 +24,18 @@ class MovieDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.buildScreen()
         // Do any additional setup after loading the view, typically from a nib.
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.buildScreen()
     }
 
     // MARK: - Private methods
     private func buildScreen() {
         guard let movie = self.movie else { return }
         if movie.image != nil {
-            self.coverImageView.image = UIImage(named: movie.image!)
+            self.coverImageView.image = movie.image
         }
         self.titleLabel.text = movie.title
         self.ratingLabel.text = movie.formattedRating

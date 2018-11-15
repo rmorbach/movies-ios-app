@@ -10,8 +10,8 @@ import UIKit
 
 class MovieTableViewCell: UITableViewCell {
 
-    static let cellIdentifier = "movieRatingCell"
-    //static let cellIdentifier = "movieCell"
+    //static let cellIdentifier = "movieRatingCell"
+    static let cellIdentifier = "movieCell"
     
     // Mark: -  IBOutlets
     
@@ -43,7 +43,7 @@ class MovieTableViewCell: UITableViewCell {
         }
         self.coverImageView.image = nil
         if movie.image != nil {
-            self.coverImageView.image = UIImage(named: movie.image!)
+            self.coverImageView.image = movie.image
         }
         if self.ratingView != nil {
             self.ratingView.buildRating(value: movie.rating ?? 10.0)

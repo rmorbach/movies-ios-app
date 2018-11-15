@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14460.32" systemVersion="18A391" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <entity name="Production" representedClassName="Production" syncable="YES" codeGenerationType="class">
-        <attribute name="duration" optional="YES" attributeType="Decimal" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="image" optional="YES" attributeType="String" syncable="YES"/>
+    <entity name="Category" representedClassName="Category" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="movies" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Movie" inverseName="categories" inverseEntity="Movie" syncable="YES"/>
+    </entity>
+    <entity name="Movie" representedClassName="Movie" syncable="YES" codeGenerationType="class">
+        <attribute name="duration" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="imageData" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="notification" optional="YES" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
         <attribute name="rating" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="summary" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="items" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Production" inverseName="items" inverseEntity="Production" syncable="YES"/>
+        <relationship name="categories" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Category" inverseName="movies" inverseEntity="Category" syncable="YES"/>
+        <relationship name="items" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Movie" inverseName="items" inverseEntity="Movie" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Production" positionX="-925.90234375" positionY="-3287.3359375" width="128" height="133"/>
+        <element name="Movie" positionX="-925.90234375" positionY="-3287.3359375" width="128" height="165"/>
+        <element name="Category" positionX="-909" positionY="-3222" width="128" height="75"/>
     </elements>
 </model>

@@ -30,7 +30,7 @@ class MovieItemCollectionViewCell: UICollectionViewCell {
     // Mark: -  Public methods
     public func prepareCell(movie: Movie) {
         if movie.image != nil {
-            self.coverImageView.image = UIImage(named: movie.image!)
+            self.coverImageView.image = movie.image
         }
         self.titleLabel.text = movie.title
     }

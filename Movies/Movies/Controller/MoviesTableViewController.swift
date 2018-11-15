@@ -7,12 +7,13 @@
 //
 
 import UIKit
+import CoreData
 
 class MoviesTableViewController: UITableViewController {
-
-    var movies = [Movie]()
+    
     var selectedMovie: Movie?
-    let moviesProvider = MoviesFileDataProvider()
+    
+    var fetchedResultController: NSFetchedResultsController<Movie>?
     
     @IBOutlet var emptyDataView: UIView!
     
@@ -24,27 +25,31 @@ class MoviesTableViewController: UITableViewController {
     
     // MARK: - Private methods
     private func loadMovies() {
-        moviesProvider.fetch {[weak self] error, movies in
-            if error != nil {
-                self?.movies = [Movie]()
-            } else if movies != nil {
-                self?.movies = movies!
-            } else {
-                self?.movies = [Movie]()
-            }
-            self?.tableView.reloadData()
+        let fetchRequest: NSFetchRequest<Movie> = Movie.fetchRequest()
+        let sortTitleDescriptor = NSSortDescriptor(keyPath: \Movie.title, ascending: true)
+        
+        fetchRequest.sortDescriptors = [sortTitleDescriptor];
+        
+        fetchedResultController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        
+        fetchedResultController?.delegate = self;
+        do {
+            try fetchedResultController?.performFetch()
+        } catch {
+            print(error)
         }
     }
     
     private func confirmDelete(at indexPath: IndexPath) {
-        let movie = movies[indexPath.row]
+        guard let movie = self.fetchedResultController?.object(at: indexPath) else {
+            return
+        }
         let confirmActionSheet = UIAlertController(title: "Remover filme \(movie.title)?", message:nil, preferredStyle: UIAlertController.Style.actionSheet);
         let deleteAction = UIAlertAction(title: "Remover", style: UIAlertAction.Style.destructive) {[weak self] action in
-            self?.movies.remove(at: indexPath.row)
+            self?.context.delete(movie)
             self?.tableView.beginUpdates()
             self?.tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.middle)
             self?.tableView.endUpdates()
-           // self?.tableView.reloadData()
         }
         let dismissAction = UIAlertAction(title: "Cancelar", style: UIAlertAction.Style.default) { action in
             self.dismiss(animated: true, completion: nil)
@@ -70,28 +75,30 @@ extension MoviesTableViewController: UIGestureRecognizerDelegate {}
 extension MoviesTableViewController {
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        var result = 1
         self.tableView.backgroundView = nil
-        if movies.count == 0 {
+        guard let counter = fetchedResultController?.fetchedObjects?.count else {
             self.tableView.backgroundView = self.emptyDataView
-            result = 0
+            return 0
         }
-        return result
+        if counter == 0 {
+            self.tableView.backgroundView = self.emptyDataView
+            return 0
+        }
+        
+        return 1
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return movies.count
+        return fetchedResultController?.fetchedObjects?.count ?? 0
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let movie = movies[indexPath.row]
-        if movie.itemType == ItemType.movie {
-            if let cell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.cellIdentifier) as? MovieTableViewCell {
-                cell.prepareCell(movie: movie)
-                return cell
-            }
+        
+        guard let movie = self.fetchedResultController?.object(at: indexPath) else {
+            return UITableViewCell()
         }
-        if let cell = tableView.dequeueReusableCell(withIdentifier: MoviesPromoTableViewCell.cellIdentifier) as? MoviesPromoTableViewCell {
+        
+        if let cell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.cellIdentifier) as? MovieTableViewCell {
             cell.prepareCell(movie: movie)
             return cell
         }
@@ -102,11 +109,7 @@ extension MoviesTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        let movie = movies[indexPath.row]
-        if movie.itemType == ItemType.movie {
-            return true
-        }
-        return false
+        return true
     }
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
@@ -122,11 +125,16 @@ extension MoviesTableViewController {
 // MARK: - Table view delegate
 extension MoviesTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let movie = movies[indexPath.row]
-        if movie.itemType == ItemType.movie {
-            self.selectedMovie = movie
-            self.performSegue(withIdentifier: "movieDetailSegue", sender: nil)
-        }
+        guard let movie = self.fetchedResultController?.object(at: indexPath) else { return }
+        self.selectedMovie = movie
+        self.performSegue(withIdentifier: "movieDetailSegue", sender: nil)
+    }
+}
+
+extension MoviesTableViewController: NSFetchedResultsControllerDelegate {
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        self.tableView.reloadData()
     }
 }
 
