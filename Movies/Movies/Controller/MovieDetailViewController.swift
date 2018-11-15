@@ -61,7 +61,7 @@ class MovieDetailViewController: UIViewController {
         }
         
         if movie.notification != nil {
-            datePicker.date = movie.notification!
+            datePicker.date = movie.notification!.date!
             scheduleTextField.text = datePicker.date.format
             self.scheduleSwitch.setOn(true, animated: true)
             UIView.animate(withDuration: 0.4) {
@@ -88,8 +88,8 @@ class MovieDetailViewController: UIViewController {
      
     }
     
-    private func scheduleMovie() {
-        let id = String(Date().timeIntervalSince1970)
+    private func scheduleMovie(with identifier: String) {
+        
         let content = UNMutableNotificationContent()
         content.title = "Lembrete 📽"
         content.body = "Tá na hora de assistir \(movie!.title!)"
@@ -98,10 +98,11 @@ class MovieDetailViewController: UIViewController {
         content.categoryIdentifier = "lembrete"
         let components = Calendar.current.dateComponents([.month, .year, .day, .hour, .minute], from: datePicker.date)
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
-        let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
+        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
         UNUserNotificationCenter.current().add(request) { error in
             
         }
+            
     }
     
     private func askNotificationPermission() {
@@ -137,6 +138,13 @@ class MovieDetailViewController: UIViewController {
         
     }
     
+    private func removePendingNotification() {
+        guard let pedingIdentifer = movie?.notification?.id else {
+            return
+        }
+        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [pedingIdentifer])
+    }
+    
     private func cancelShedule() {
         UIView.animate(withDuration: 0.4) {
             DispatchQueue.main.async {
@@ -160,10 +168,15 @@ class MovieDetailViewController: UIViewController {
     @objc func doneSelectingDate() {
         
         scheduleTextField.text = datePicker.date.format
-        movie?.notification = datePicker.date
-        saveContext()
-        scheduleMovie()
+        if movie?.notification == nil {
+            movie?.notification = Notification(context: context)
+        }
+        movie?.notification!.date = datePicker.date
+            
+        let id = String(Date().timeIntervalSince1970)
+        scheduleMovie(with: id)
         
+        saveContext()
         cancelSelectingDate()
     }
     @objc func cancelSelectingDate() {
@@ -195,6 +208,8 @@ class MovieDetailViewController: UIViewController {
                 self.scheduleDateStackView.isHidden = false
             }
         } else {
+            self.scheduleTextField.text = ""
+            self.removePendingNotification()
             UIView.animate(withDuration: 0.4) {
                 self.scheduleDateStackView.isHidden = true
             }
