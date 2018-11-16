@@ -227,6 +227,9 @@ class RegisterEditMovieViewController: UIViewController {
         
         editingMovie?.categories = selectedCategories as NSSet
         saveContext()
+        
+        navigationController?.popViewController(animated: true)
+        
     }
     
     @IBAction func selectPhoto() {

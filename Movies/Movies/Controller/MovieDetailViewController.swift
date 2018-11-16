@@ -117,7 +117,6 @@ class MovieDetailViewController: UIViewController {
                 self?.cancelShedule()
             case .notDetermined:
                 print("notDetermined")
-                self?.cancelShedule()
             case .provisional:
                 print("provisional")
             }
@@ -142,6 +141,8 @@ class MovieDetailViewController: UIViewController {
         guard let pedingIdentifer = movie?.notification?.id else {
             return
         }
+        movie!.notification = nil
+        saveContext()
         UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [pedingIdentifer])
     }
     
@@ -172,11 +173,10 @@ class MovieDetailViewController: UIViewController {
             movie?.notification = Notification(context: context)
         }
         movie?.notification!.date = datePicker.date
-            
         let id = String(Date().timeIntervalSince1970)
-        scheduleMovie(with: id)
-        
+        movie?.notification!.id = id
         saveContext()
+        scheduleMovie(with: id)
         cancelSelectingDate()
     }
     @objc func cancelSelectingDate() {
