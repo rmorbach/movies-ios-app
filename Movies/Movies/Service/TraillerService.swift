@@ -1,0 +1,84 @@
+//
+//  TraillerService.swift
+//  Movies
+//
+//  Created by Rodrigo Morbach on 16/11/18.
+//  Copyright © 2018 Movile. All rights reserved.
+//
+
+import Foundation
+
+enum ServiceError: String, Error {
+    case urlNotFound = "Não encontrado"
+    case unknown = "Desconhecido"
+    case invalidUrl = "URL inválida"
+    case parseError = "Erro de parse"
+    case emptyResponse = "Resposta vazia"
+}
+
+class TraillerService {
+    
+    let apiBaseUrl = "https://itunes.apple.com/search?media=movie&entity=movie&term="
+    
+    func trailerUrlFor(movie title: String, completion: @escaping (_ url: String?, _ error: ServiceError?)->Void) {
+        let urlString = apiBaseUrl + title
+        guard let formattedUrlString = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed) else {
+            completion(nil, ServiceError.invalidUrl)
+            return
+        }
+        
+        guard let movieUrl = URL(string: formattedUrlString) else {
+            completion(nil, ServiceError.invalidUrl)
+            return
+        }
+        Network.post(url: movieUrl, contentType: nil, accept: "text/javascript; charset=utf-8", payload: nil) { data, response, error in
+            if error != nil {
+                completion(nil, ServiceError.unknown)
+                return
+            }
+
+            guard let resp = response else {
+                completion(nil, ServiceError.unknown)
+                return
+            }
+            
+            if resp.statusCode == 200 {
+                
+                if data != nil {
+                    
+                    let decoder = JSONDecoder()
+                    
+                    do {
+                        
+                        let itunesResponse = try decoder.decode(ItunesApiResponse.self, from: data!)
+                        if itunesResponse.resultCount == 0 {
+                            completion(nil, ServiceError.emptyResponse)
+                            return
+                        }
+                        
+                        completion(itunesResponse.results.first!.previewUrl, nil)                        
+                        
+                    } catch {
+                        completion(nil, ServiceError.parseError)
+                        return
+                    }
+                } else {
+                    completion(nil, ServiceError.emptyResponse)
+                    return
+                }
+                
+            } else if resp.statusCode == 404 {
+                completion(nil, ServiceError.urlNotFound)
+                return
+            } else if resp.statusCode > 405 {
+                completion(nil, ServiceError.unknown)
+                return
+            }
+            
+            
+        }
+
+        
+    }
+    
+}

@@ -353,25 +353,7 @@ extension RegisterEditMovieViewController: NSFetchedResultsControllerDelegate {
 extension RegisterEditMovieViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let originalImage = info[.originalImage] as? UIImage else { return }
-        
-        var smallSize: CGSize = originalImage.size
-        
-        if  smallSize.width > smallSize.height {
-            if smallSize.width > 800 {
-                let newWidth = CGFloat(800)
-                let newHeight = (smallSize.height / smallSize.width) * newWidth
-                smallSize = CGSize(width: newWidth, height: newHeight)
-            }
-        } else if smallSize.height > 800 {
-            let newHeight = CGFloat(800)
-            let newWidth = (smallSize.width / smallSize.height) * newHeight
-            smallSize = CGSize(width: newWidth, height: newHeight)
-        }
-        
-        UIGraphicsBeginImageContext(smallSize)
-        originalImage.draw(in: CGRect(x: 0, y: 0, width: smallSize.width, height: smallSize.height))
-        let smallImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()        
+        let smallImage = originalImage.resizedTo(maxDimension: CGFloat(800))
         self.coverImageView.image = smallImage
         dismiss(animated: true, completion: nil)
         pictureChanged = true

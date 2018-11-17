@@ -39,6 +39,7 @@ class UserSettingsViewController: UIViewController {
         autoPlaySwitch.setOn(autoPlay, animated: true)
     }
     private func arrangeStackView() {
+        if self.themeColorStackView == nil { return }
         if UIDevice.current.orientation.isLandscape {
             self.themeColorStackView.axis = .horizontal
         } else {

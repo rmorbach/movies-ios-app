@@ -8,9 +8,15 @@
 
 import UIKit
 import UserNotifications
+import AVFoundation
+import AVKit
 
 class MovieDetailViewController: UIViewController {
 
+    var playerViewController: AVPlayerViewController?
+    
+    var videoAlreadyShown = false
+    
     public var movie: Movie?
     let datePicker: UIDatePicker = {
         let dp = UIDatePicker()
@@ -46,9 +52,11 @@ class MovieDetailViewController: UIViewController {
     @IBOutlet weak var scheduleTextField: UITextField!
     @IBOutlet weak var scheduleSwitch: UISwitch!
     
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
     @IBOutlet weak var scheduleDateStackView: UIStackView!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         datePicker.minimumDate = Date()
         prepareTextField()
         // Do any additional setup after loading the view, typically from a nib.
@@ -56,9 +64,25 @@ class MovieDetailViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.view.backgroundColor = UIViewController.themeColor
+        self.spinner.stopAnimating()
+        self.spinner.isHidden = true
         self.buildScreen()
+        if !videoAlreadyShown {
+            
+            if !UserSettingsManager.shared.autoPlay() {
+                return
+            }
+            self.tryToPlay()
+        }
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if self.playerViewController != nil && self.playerViewController?.player != nil {
+            self.playerViewController?.player?.pause()
+        }
+    }
+    
     // MARK: - Private methods
     private func buildScreen() {
         guard let movie = self.movie else { return }
@@ -116,7 +140,6 @@ class MovieDetailViewController: UIViewController {
     
     private func askNotificationPermission() {
         let center = UNUserNotificationCenter.current()
-        center.delegate = self
         center.getNotificationSettings { [weak self] settings in
             switch settings.authorizationStatus {
             case .authorized:
@@ -220,32 +243,45 @@ class MovieDetailViewController: UIViewController {
         }
     }
     
+    @IBAction func play(_ sender: Any) {
+        tryToPlay()
+    }
+    
 }
 
 
-extension MovieDetailViewController : UNUserNotificationCenterDelegate {
-    func userNotificationCenter(_ center: UNUserNotificationCenter, openSettingsFor notification: UNNotification?) {
+// MARK - Player
+extension MovieDetailViewController {
+ 
+    func tryToPlay() {
+    
+        self.spinner.isHidden = false
+        self.spinner.startAnimating()
         
-    }
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        
-        let identifier = response.actionIdentifier
-        switch identifier {
-        case "confirm":
-            print("confirm clicked")
-        case "cancel":
-            print("cancel clicked")
-        case UNNotificationDefaultActionIdentifier:
-            print("notification clicked")
-        case UNNotificationDismissActionIdentifier:
-            print("dismiss")
-        default:
-            break
+        let service = TraillerService()
+        service.trailerUrlFor(movie: self.movie!.title!) {[weak self] previewUrlString, error in
+            DispatchQueue.main.async {
+                self?.spinner.stopAnimating()
+                self?.spinner.isHidden = true
+                if error != nil {
+                    self?.showAlert(with: "Erro", message: error!.rawValue)
+                    return
+                }
+                
+                guard let url = URL(string: previewUrlString ?? "") else { return }
+                let player = AVPlayer(url: url)
+                self?.playerViewController = AVPlayerViewController()
+                self?.playerViewController?.player = player
+                self?.videoAlreadyShown = true
+                self?.playerViewController?.player?.play()
+                guard let playerVc = self?.playerViewController else { return }
+                self?.present(playerVc, animated: true, completion: nil)
+                
+            }
         }
-        completionHandler()
+        
+        
+        
     }
     
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        completionHandler([.alert, .badge, .sound])
-    }
 }
