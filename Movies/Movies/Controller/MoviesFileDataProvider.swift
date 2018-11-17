@@ -12,25 +12,25 @@ class MoviesFileDataProvider: DataProvider {
     
     let assetName = "movies"
         
-    func fetch(completion: (Error?, [Movie]?) -> Void) {
+    func fetch(completion: (Error?, [MovieFile]?) -> Void) {
         guard let movieSet = NSDataAsset(name: assetName)?.data else {
             //TODO - 
             return
         }
         do {
             let jsonDecoder = JSONDecoder()
-            let movies = try jsonDecoder.decode([Movie].self, from: movieSet)
+            let movies = try jsonDecoder.decode([MovieFile].self, from: movieSet)
             completion(nil, movies);
         } catch {
             completion(error, nil)
         }
     }
         
-    func save(object: Movie) -> Bool {
+    func save(object: MovieFile) -> Bool {
         return false
     }
     
-    func delete(object: Movie) -> Bool {
+    func delete(object: MovieFile) -> Bool {
         return false
     }
 }

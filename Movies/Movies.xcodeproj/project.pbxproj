@@ -23,6 +23,11 @@
 		5E25408D218F85CC008A14B6 /* RatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E25408C218F85CC008A14B6 /* RatingView.swift */; };
 		5E25408F218FB791008A14B6 /* CustomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E25408E218FB791008A14B6 /* CustomView.swift */; };
 		5EC4231521925AD900913A49 /* RegisterEditMovieViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EC4231421925AD900913A49 /* RegisterEditMovieViewController.swift */; };
+		5EEACA71219F7885003218ED /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5EEACA70219F7885003218ED /* Settings.bundle */; };
+		5EEACA73219F7893003218ED /* UserSettingsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EEACA72219F7893003218ED /* UserSettingsManager.swift */; };
+		5EEACA75219F846E003218ED /* UserSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EEACA74219F846E003218ED /* UserSettingsViewController.swift */; };
+		5EEACA77219F8F92003218ED /* MoviesFileDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EEACA76219F8F92003218ED /* MoviesFileDataProvider.swift */; };
+		5EEACA79219F8F9E003218ED /* MovieFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EEACA78219F8F9E003218ED /* MovieFile.swift */; };
 		5EF574B6219DC4B500F0F190 /* UIViewController+CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF574B5219DC4B500F0F190 /* UIViewController+CoreData.swift */; };
 		5EF574B8219DC4D400F0F190 /* String+Trim.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF574B7219DC4D400F0F190 /* String+Trim.swift */; };
 		5EF574BA219DC4F200F0F190 /* Movie+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF574B9219DC4F200F0F190 /* Movie+Image.swift */; };
@@ -30,6 +35,7 @@
 		5EF574BE219E0A3000F0F190 /* MovieCategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF574BD219E0A3000F0F190 /* MovieCategoryCollectionViewCell.swift */; };
 		5EF574C0219E2EC200F0F190 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5EF574BF219E2EC200F0F190 /* UserNotifications.framework */; };
 		5EF574C2219E33FE00F0F190 /* Date+Formatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF574C1219E33FE00F0F190 /* Date+Formatter.swift */; };
+		5EF574C4219E4D6E00F0F190 /* UIViewController+DefaultColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF574C3219E4D6E00F0F190 /* UIViewController+DefaultColor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +57,11 @@
 		5E25408C218F85CC008A14B6 /* RatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingView.swift; sourceTree = "<group>"; };
 		5E25408E218FB791008A14B6 /* CustomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomView.swift; sourceTree = "<group>"; };
 		5EC4231421925AD900913A49 /* RegisterEditMovieViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterEditMovieViewController.swift; sourceTree = "<group>"; };
+		5EEACA70219F7885003218ED /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		5EEACA72219F7893003218ED /* UserSettingsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingsManager.swift; sourceTree = "<group>"; };
+		5EEACA74219F846E003218ED /* UserSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettingsViewController.swift; sourceTree = "<group>"; };
+		5EEACA76219F8F92003218ED /* MoviesFileDataProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MoviesFileDataProvider.swift; sourceTree = "<group>"; };
+		5EEACA78219F8F9E003218ED /* MovieFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MovieFile.swift; sourceTree = "<group>"; };
 		5EF574B5219DC4B500F0F190 /* UIViewController+CoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+CoreData.swift"; sourceTree = "<group>"; };
 		5EF574B7219DC4D400F0F190 /* String+Trim.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Trim.swift"; sourceTree = "<group>"; };
 		5EF574B9219DC4F200F0F190 /* Movie+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Movie+Image.swift"; sourceTree = "<group>"; };
@@ -58,6 +69,7 @@
 		5EF574BD219E0A3000F0F190 /* MovieCategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCategoryCollectionViewCell.swift; sourceTree = "<group>"; };
 		5EF574BF219E2EC200F0F190 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		5EF574C1219E33FE00F0F190 /* Date+Formatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Formatter.swift"; sourceTree = "<group>"; };
+		5EF574C3219E4D6E00F0F190 /* UIViewController+DefaultColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+DefaultColor.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +105,7 @@
 		5E254059218F2CF3008A14B6 /* Movies */ = {
 			isa = PBXGroup;
 			children = (
+				5EEACA6F219F7879003218ED /* Settings */,
 				5EF574B4219DC4A800F0F190 /* Extension */,
 				5E25407C218F71C4008A14B6 /* CoreData */,
 				5E254079218F3218008A14B6 /* Protocol */,
@@ -140,6 +153,7 @@
 		5E254071218F3106008A14B6 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				5EEACA78219F8F9E003218ED /* MovieFile.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -147,6 +161,7 @@
 		5E254078218F3179008A14B6 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				5EEACA76219F8F92003218ED /* MoviesFileDataProvider.swift */,
 				5E25405C218F2CF3008A14B6 /* MovieDetailViewController.swift */,
 				5E254076218F3176008A14B6 /* MoviesTableViewController.swift */,
 				5EC4231421925AD900913A49 /* RegisterEditMovieViewController.swift */,
@@ -180,6 +195,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		5EEACA6F219F7879003218ED /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				5EEACA70219F7885003218ED /* Settings.bundle */,
+				5EEACA72219F7893003218ED /* UserSettingsManager.swift */,
+				5EEACA74219F846E003218ED /* UserSettingsViewController.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
 		5EF574B4219DC4A800F0F190 /* Extension */ = {
 			isa = PBXGroup;
 			children = (
@@ -188,6 +213,7 @@
 				5EF574B9219DC4F200F0F190 /* Movie+Image.swift */,
 				5EF574BB219DC57E00F0F190 /* Movie+Properties.swift */,
 				5EF574C1219E33FE00F0F190 /* Date+Formatter.swift */,
+				5EF574C3219E4D6E00F0F190 /* UIViewController+DefaultColor.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -250,6 +276,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5EEACA71219F7885003218ED /* Settings.bundle in Resources */,
 				5E254065218F2CF4008A14B6 /* LaunchScreen.storyboard in Resources */,
 				5E254062218F2CF4008A14B6 /* Assets.xcassets in Resources */,
 				5E254060218F2CF3008A14B6 /* Main.storyboard in Resources */,
@@ -266,6 +293,8 @@
 				5EF574B6219DC4B500F0F190 /* UIViewController+CoreData.swift in Sources */,
 				5E254077218F3176008A14B6 /* MoviesTableViewController.swift in Sources */,
 				5EF574B8219DC4D400F0F190 /* String+Trim.swift in Sources */,
+				5EEACA79219F8F9E003218ED /* MovieFile.swift in Sources */,
+				5EEACA73219F7893003218ED /* UserSettingsManager.swift in Sources */,
 				5E254075218F3136008A14B6 /* MoviesPromoTableViewCell.swift in Sources */,
 				5E25407B218F3458008A14B6 /* MovieItemCollectionViewCell.swift in Sources */,
 				5E25408F218FB791008A14B6 /* CustomView.swift in Sources */,
@@ -274,9 +303,12 @@
 				5E254089218F745C008A14B6 /* DataProvider.swift in Sources */,
 				5EF574BC219DC57E00F0F190 /* Movie+Properties.swift in Sources */,
 				5EF574BA219DC4F200F0F190 /* Movie+Image.swift in Sources */,
+				5EF574C4219E4D6E00F0F190 /* UIViewController+DefaultColor.swift in Sources */,
 				5EF574BE219E0A3000F0F190 /* MovieCategoryCollectionViewCell.swift in Sources */,
 				5E25408D218F85CC008A14B6 /* RatingView.swift in Sources */,
 				5E254082218F72D4008A14B6 /* CoreDataManager.swift in Sources */,
+				5EEACA75219F846E003218ED /* UserSettingsViewController.swift in Sources */,
+				5EEACA77219F8F92003218ED /* MoviesFileDataProvider.swift in Sources */,
 				5E254080218F71E3008A14B6 /* Movies.xcdatamodeld in Sources */,
 				5EC4231521925AD900913A49 /* RegisterEditMovieViewController.swift in Sources */,
 				5EF574C2219E33FE00F0F190 /* Date+Formatter.swift in Sources */,

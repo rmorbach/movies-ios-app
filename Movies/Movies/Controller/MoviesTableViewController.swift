@@ -15,12 +15,19 @@ class MoviesTableViewController: UITableViewController {
     
     var fetchedResultController: NSFetchedResultsController<Movie>?
     
+    @objc dynamic var p: Int = 0
+    
     @IBOutlet var emptyDataView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self;
+        //self.navigationController?.navigationBar.barTintColor = UIColor.blue
         loadMovies()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tableView.backgroundColor = UIViewController.themeColor
     }
     
     // MARK: - Private methods
@@ -46,9 +53,6 @@ class MoviesTableViewController: UITableViewController {
         }
         let confirmActionSheet = UIAlertController(title: "Remover filme \(movie.title!)?", message:nil, preferredStyle: UIAlertController.Style.actionSheet);
         let deleteAction = UIAlertAction(title: "Remover", style: UIAlertAction.Style.destructive) {[weak self] action in
-//            self?.tableView.beginUpdates()
-//            self?.tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.middle)
-//            self?.tableView.endUpdates()
             self?.context.delete(movie)
         }
         let dismissAction = UIAlertAction(title: "Cancelar", style: UIAlertAction.Style.default) { action in
@@ -59,7 +63,7 @@ class MoviesTableViewController: UITableViewController {
         confirmActionSheet.addAction(dismissAction)
         self.present(confirmActionSheet, animated: true, completion: nil)
     }
-    
+   
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destVc = segue.destination as? MovieDetailViewController {

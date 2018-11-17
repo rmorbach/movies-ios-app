@@ -26,7 +26,7 @@ extension Movie {
     
     var durationHours: String {
         get {            
-            guard let hours = self.duration?.components(separatedBy: "h").first else {
+            guard let hours = self.duration?.components(separatedBy: "h").first?.trimmed() else {
                 return "0"
             }
             return hours.trimmed()
@@ -35,10 +35,10 @@ extension Movie {
     
     var durationMinutes: String {
         get {
-            guard let minutes = self.duration?.components(separatedBy: "h").last else {
+            guard let minutes = self.duration?.components(separatedBy: "h").last?.trimmed() else {
                 return "0"
             }
-            return minutes.replacingOccurrences(of: "m", with: "").trimmed()
+            return minutes.replacingOccurrences(of: "min", with: "").trimmed()
         }
     }
     

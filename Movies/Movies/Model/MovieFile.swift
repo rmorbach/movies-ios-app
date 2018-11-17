@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct Movie: Codable {
+struct MovieFile: Codable {
 
     let title: String
     let categories: [String]?
@@ -17,7 +17,7 @@ struct Movie: Codable {
     let summary: String?
     let image: String?
     let itemType: ItemType?
-    let items: [Movie]?
+    let items: [MovieFile]?
     
     var formattedRating: String {
         get {

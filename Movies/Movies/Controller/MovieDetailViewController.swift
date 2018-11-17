@@ -18,6 +18,21 @@ class MovieDetailViewController: UIViewController {
         return dp
     }()
     
+    private var schedule: Bool = false {
+        didSet {
+            self.scheduleSwitch.setOn(schedule, animated: true)
+            if schedule {
+                UIView.animate(withDuration: 0.4) {
+                    self.scheduleDateStackView.isHidden = false
+                }
+            } else {
+                UIView.animate(withDuration: 0.4) {
+                    self.scheduleDateStackView.isHidden = true
+                }
+            }
+        }
+    }
+    
     // MARK: IBOutlets
     
     @IBOutlet weak var coverImageView: UIImageView!
@@ -40,6 +55,7 @@ class MovieDetailViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.view.backgroundColor = UIViewController.themeColor
         self.buildScreen()
     }
 
@@ -63,18 +79,11 @@ class MovieDetailViewController: UIViewController {
         if movie.notification != nil {
             datePicker.date = movie.notification!.date!
             scheduleTextField.text = datePicker.date.format
-            self.scheduleSwitch.setOn(true, animated: true)
-            UIView.animate(withDuration: 0.4) {
-                self.scheduleDateStackView.isHidden = false
-            }
+            self.schedule = true
         } else {
-            self.scheduleSwitch.setOn(false, animated: true)
-            UIView.animate(withDuration: 0.4) {
-                self.scheduleDateStackView.isHidden = true
-            }
+            self.schedule = false
         }
-        
-        
+    
     }
     
     func prepareTextField() {
@@ -147,12 +156,7 @@ class MovieDetailViewController: UIViewController {
     }
     
     private func cancelShedule() {
-        UIView.animate(withDuration: 0.4) {
-            DispatchQueue.main.async {
-                self.scheduleSwitch.setOn(false, animated: true)
-                self.scheduleDateStackView.isHidden = true
-            }
-        }
+        self.schedule = false
         let alert = UIAlertController(title: "😢", message: "Você precisa habilitar as notificações para que possamos te lembrar de assistir um filme", preferredStyle: UIAlertController.Style.alert)
         let openSettingsAction = UIAlertAction(title: "Configurações", style: UIAlertAction.Style.default) { action in
             guard let url = URL(string: UIApplication.openSettingsURLString) else { return }

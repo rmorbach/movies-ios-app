@@ -63,6 +63,7 @@ class RegisterEditMovieViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.view.backgroundColor = UIViewController.themeColor
         self.addObservers()
         
         movieSummaryTextView.text = ""
@@ -214,14 +215,14 @@ class RegisterEditMovieViewController: UIViewController {
         if let hours = durationHoursTextField.text {
             var hoursString = "\(hours)h"
             if let minutes = durationMinutesTextField.text {
-                hoursString = "\(hoursString)\(minutes)m"
+                hoursString = "\(hoursString) \(minutes)min"
             } else {
-                hoursString = "\(hoursString)\0m"
+                hoursString = "\(hoursString) \0min"
             }
             editingMovie?.duration = hoursString
         } else {
             if let minutes = durationMinutesTextField.text {
-                editingMovie?.duration = "0h\(minutes)m"
+                editingMovie?.duration = "0h \(minutes)min"
             }
         }
         
@@ -387,9 +388,9 @@ extension RegisterEditMovieViewController: UINavigationControllerDelegate, UIIma
 extension RegisterEditMovieViewController: UIPickerViewDataSource, UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         if pickerView == self.hourPickerView {
-            return 12
+            return 13
         }
-        return 59
+        return 60
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
