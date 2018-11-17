@@ -32,9 +32,7 @@ class MovieDetailViewController: UIViewController {
                     self.scheduleDateStackView.isHidden = false
                 }
             } else {
-                UIView.animate(withDuration: 0.4) {
-                    self.scheduleDateStackView.isHidden = true
-                }
+                self.scheduleDateStackView.isHidden = true
             }
         }
     }
@@ -56,9 +54,9 @@ class MovieDetailViewController: UIViewController {
     @IBOutlet weak var scheduleDateStackView: UIStackView!
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         datePicker.minimumDate = Date()
         prepareTextField()
+        self.scheduleDateStackView.isHidden = true
         // Do any additional setup after loading the view, typically from a nib.
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -68,7 +66,6 @@ class MovieDetailViewController: UIViewController {
         self.spinner.isHidden = true
         self.buildScreen()
         if !videoAlreadyShown {
-            
             if !UserSettingsManager.shared.autoPlay() {
                 return
             }
