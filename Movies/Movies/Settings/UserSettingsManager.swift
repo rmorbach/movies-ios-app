@@ -16,7 +16,7 @@ private enum UDefaultKeys {
 
 enum ThemeColor: String {
     case black = "0"
-    case blue = "1"
+    case green = "1"
     case orange = "2"
 }
 
@@ -49,8 +49,8 @@ class UserSettingsManager {
         
         var themeColor = UIColor.black
         switch colorOrder {
-        case ThemeColor.blue.rawValue:
-            themeColor = UIColor.blue
+        case ThemeColor.green.rawValue:
+            themeColor = UIColor(red: 40/255, green: 108/255, blue: 18/255, alpha: 1.0)
         case ThemeColor.orange.rawValue:
             themeColor = UIColor.orange
         default:

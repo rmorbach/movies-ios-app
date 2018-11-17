@@ -29,7 +29,7 @@ class UserSettingsViewController: UIViewController {
         switch themeColor {
         case .black:
             themColorSegmentedControl.selectedSegmentIndex = 0
-        case .blue:
+        case .green:
             themColorSegmentedControl.selectedSegmentIndex = 1
         case .orange:
             themColorSegmentedControl.selectedSegmentIndex = 2
@@ -38,6 +38,13 @@ class UserSettingsViewController: UIViewController {
         let autoPlay = userSettings.autoPlay()
         autoPlaySwitch.setOn(autoPlay, animated: true)
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        appDelegate.applySettings()
+    }
+    
     private func arrangeStackView() {
         if self.themeColorStackView == nil { return }
         if UIDevice.current.orientation.isLandscape {
@@ -61,7 +68,7 @@ class UserSettingsViewController: UIViewController {
         case 0:
             userSettings.changeTheme(with: ThemeColor.black)
         case 1:
-            userSettings.changeTheme(with: ThemeColor.blue)
+            userSettings.changeTheme(with: ThemeColor.green)
         case 2:
             userSettings.changeTheme(with: ThemeColor.orange)
         default:

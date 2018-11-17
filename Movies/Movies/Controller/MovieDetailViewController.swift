@@ -126,6 +126,7 @@ class MovieDetailViewController: UIViewController {
         let content = UNMutableNotificationContent()
         content.title = "Lembrete 📽"
         content.body = "Tá na hora de assistir \(movie!.title!)"
+        content.launchImageName = "avengers2"
         
         //Agrupa notificações
         content.categoryIdentifier = "lembrete"
@@ -154,7 +155,7 @@ class MovieDetailViewController: UIViewController {
             }
         }
         
-        let confirmAction = UNNotificationAction(identifier: "confirm", title: "OK", options: [.foreground])
+        let confirmAction = UNNotificationAction(identifier: "confirm", title: "Agora!", options: [.foreground])
         let cancelAction = UNNotificationAction(identifier: "cancel", title: "Cancelar", options: [])
         
         let category = UNNotificationCategory(identifier: "lembrete", actions: [confirmAction, cancelAction], intentIdentifiers: [], hiddenPreviewsBodyPlaceholder: "", options: [.customDismissAction])

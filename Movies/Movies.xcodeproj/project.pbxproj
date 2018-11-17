@@ -34,6 +34,7 @@
 		5EEACA83219F9EA4003218ED /* ItunesApiResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EEACA82219F9EA4003218ED /* ItunesApiResponse.swift */; };
 		5EEACA85219FA0FD003218ED /* UIViewController+Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EEACA84219FA0FD003218ED /* UIViewController+Alert.swift */; };
 		5EEACA87219FA68C003218ED /* UIImage+Resize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EEACA86219FA68C003218ED /* UIImage+Resize.swift */; };
+		5EEACA89219FB32E003218ED /* UIViewController+Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EEACA88219FB32E003218ED /* UIViewController+Settings.swift */; };
 		5EF574B6219DC4B500F0F190 /* UIViewController+CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF574B5219DC4B500F0F190 /* UIViewController+CoreData.swift */; };
 		5EF574B8219DC4D400F0F190 /* String+Trim.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF574B7219DC4D400F0F190 /* String+Trim.swift */; };
 		5EF574BA219DC4F200F0F190 /* Movie+Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF574B9219DC4F200F0F190 /* Movie+Image.swift */; };
@@ -74,6 +75,7 @@
 		5EEACA82219F9EA4003218ED /* ItunesApiResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItunesApiResponse.swift; sourceTree = "<group>"; };
 		5EEACA84219FA0FD003218ED /* UIViewController+Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Alert.swift"; sourceTree = "<group>"; };
 		5EEACA86219FA68C003218ED /* UIImage+Resize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Resize.swift"; sourceTree = "<group>"; };
+		5EEACA88219FB32E003218ED /* UIViewController+Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Settings.swift"; sourceTree = "<group>"; };
 		5EF574B5219DC4B500F0F190 /* UIViewController+CoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+CoreData.swift"; sourceTree = "<group>"; };
 		5EF574B7219DC4D400F0F190 /* String+Trim.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Trim.swift"; sourceTree = "<group>"; };
 		5EF574B9219DC4F200F0F190 /* Movie+Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Movie+Image.swift"; sourceTree = "<group>"; };
@@ -241,6 +243,7 @@
 				5EF574C3219E4D6E00F0F190 /* UIViewController+DefaultColor.swift */,
 				5EEACA84219FA0FD003218ED /* UIViewController+Alert.swift */,
 				5EEACA86219FA68C003218ED /* UIImage+Resize.swift */,
+				5EEACA88219FB32E003218ED /* UIViewController+Settings.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -326,6 +329,7 @@
 				5E254075218F3136008A14B6 /* MoviesPromoTableViewCell.swift in Sources */,
 				5E25407B218F3458008A14B6 /* MovieItemCollectionViewCell.swift in Sources */,
 				5E25408F218FB791008A14B6 /* CustomView.swift in Sources */,
+				5EEACA89219FB32E003218ED /* UIViewController+Settings.swift in Sources */,
 				5EEACA7F219F9906003218ED /* TraillerService.swift in Sources */,
 				5E25405D218F2CF3008A14B6 /* MovieDetailViewController.swift in Sources */,
 				5EEACA81219F99C0003218ED /* Network.swift in Sources */,
