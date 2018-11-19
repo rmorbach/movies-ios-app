@@ -26,13 +26,16 @@ class MovieItemCollectionViewCell: UICollectionViewCell {
     // MARK: IBOutlets
     @IBOutlet weak var coverImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
+
+}
+extension MovieItemCollectionViewCell: DataCell {
+    typealias Element = Movie
     
     // MARK: - Public methods
-    public func prepareCell(movie: Movie) {
-        if movie.image != nil {
-            self.coverImageView.image = movie.image
+    func prepareCell(with object: Element) {
+        if object.image != nil {
+            self.coverImageView.image = object.image
         }
-        self.titleLabel.text = movie.title
+        self.titleLabel.text = object.title
     }
-    
 }

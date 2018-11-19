@@ -18,24 +18,11 @@ class MoviesPromoTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         moviesCollectionView.dataSource = self
-        
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-        // Configure the view for the selected state
     }
     
     override func prepareForReuse() {
         movies = [Movie]()
     }
-    
-    // MARK: - Public methods
-    public func prepareCell(movie: Movie) {
-        
-    }
-    
 }
 
 extension MoviesPromoTableViewCell: UICollectionViewDataSource {
@@ -47,7 +34,7 @@ extension MoviesPromoTableViewCell: UICollectionViewDataSource {
         
         if let cell = cll as? MovieItemCollectionViewCell {
             let movie = movies[idxPath.row]
-            cell.prepareCell(movie: movie)
+            cell.prepareCell(with: movie)
             return cell
         }
         
@@ -58,4 +45,13 @@ extension MoviesPromoTableViewCell: UICollectionViewDataSource {
         return movies.count
     }
     
+}
+
+extension MoviesPromoTableViewCell: DataCell {
+    typealias Element = Movie
+    
+    // MARK: - Public methods
+    func prepareCell(with object: Element) {
+        
+    }
 }

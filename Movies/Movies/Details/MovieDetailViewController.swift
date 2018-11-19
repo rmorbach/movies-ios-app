@@ -16,11 +16,13 @@ class MovieDetailViewController: UIViewController {
     // MARK: Private properties
     private var playerViewController: AVPlayerViewController?
     private var videoAlreadyShown = false
+    
     private let datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
         datePicker.datePickerMode = .dateAndTime
         return datePicker
     }()
+    
     private var schedule: Bool = false {
         didSet {
             self.scheduleSwitch.setOn(schedule, animated: true)
@@ -38,7 +40,6 @@ class MovieDetailViewController: UIViewController {
     var movie: Movie?
 
     // MARK: IBOutlets
-
     @IBOutlet weak var coverImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var ratingLabel: UILabel!
@@ -51,7 +52,8 @@ class MovieDetailViewController: UIViewController {
     @IBOutlet weak var scheduleSwitch: UISwitch!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     @IBOutlet weak var scheduleDateStackView: UIStackView!
-
+    
+    // MARK: Lifecyle
     override func viewDidLoad() {
         super.viewDidLoad()
         datePicker.minimumDate = Date()
@@ -59,6 +61,7 @@ class MovieDetailViewController: UIViewController {
         self.scheduleDateStackView.isHidden = true
         // Do any additional setup after loading the view, typically from a nib.
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.view.backgroundColor = UIViewController.themeColor
@@ -111,7 +114,7 @@ class MovieDetailViewController: UIViewController {
 
     }
 
-    func prepareTextField() {
+    private func prepareTextField() {
         let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 45))
         let okButton = UIBarButtonItem()
         okButton.style = .done
@@ -235,7 +238,6 @@ class MovieDetailViewController: UIViewController {
     }
 
     // MARK: IBAction methods
-
     @IBAction func back(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
     }
@@ -268,11 +270,20 @@ class MovieDetailViewController: UIViewController {
 // MARK: - Player
 extension MovieDetailViewController {
 
-    func tryToPlay() {
-
-        self.spinner.isHidden = false
-        self.spinner.startAnimating()
-
+    /// This method should be called from the main thread
+    ///
+    /// - Parameter url: video url
+    func playVideo(for url: URL) {
+        let player = AVPlayer(url: url)
+        playerViewController = AVPlayerViewController()
+        playerViewController?.player = player
+        videoAlreadyShown = true
+        playerViewController?.player?.play()
+        guard let playerVc = self.playerViewController else { return }
+        present(playerVc, animated: true, completion: nil)
+    }
+    
+    func callTraillerService() {
         let service = TraillerService()
         service.trailerUrlFor(movie: self.movie!.title!) {[weak self] previewUrlString, error in
             DispatchQueue.main.async {
@@ -282,18 +293,18 @@ extension MovieDetailViewController {
                     self?.showAlert(with: "Erro", message: error!.rawValue)
                     return
                 }
-
                 guard let url = URL(string: previewUrlString ?? "") else { return }
-                let player = AVPlayer(url: url)
-                self?.playerViewController = AVPlayerViewController()
-                self?.playerViewController?.player = player
-                self?.videoAlreadyShown = true
-                self?.playerViewController?.player?.play()
-                guard let playerVc = self?.playerViewController else { return }
-                self?.present(playerVc, animated: true, completion: nil)
-
+                self?.playVideo(for: url)
             }
         }
+    }
+    
+    func tryToPlay() {
+
+        self.spinner.isHidden = false
+        self.spinner.startAnimating()
+
+        callTraillerService()
     }
 
 }

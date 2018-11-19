@@ -201,6 +201,50 @@ class RegisterEditMovieViewController: UIViewController {
         self.present(pickerViewController, animated: true, completion: nil)
     }
     
+    private func getFormattedDuration() -> String {
+        var result = ""
+        if let hours = durationHoursTextField.text {
+            result = "\(hours)h"
+            if let minutes = durationMinutesTextField.text {
+                result = "\(result) \(minutes)min"
+            } else {
+                result = "\(result) \0min"
+            }
+        } else {
+            if let minutes = durationMinutesTextField.text {
+                result = "0h \(minutes)min"
+            }
+        }
+        return result
+    }
+    
+    private func createMovieToBeSaved() {
+        if editingMovie == nil {
+            editingMovie = Movie(context: context)
+        }
+        editingMovie?.title = self.movieTitleTextField.text
+        editingMovie?.summary = self.movieSummaryTextView.text
+        
+        if let rating = Double(currentRatingLabel.text!) {
+            editingMovie?.rating = rating
+        }
+        
+        if pictureChanged {
+            if let image = coverImageView.image {
+                let imageData = image.jpegData(compressionQuality: 1.0)
+                editingMovie?.imageData = imageData
+            }
+        }
+        
+       editingMovie?.duration = getFormattedDuration()
+        
+        editingMovie?.categories = selectedCategories as NSSet
+    }
+    
+    private func isCameraAvailable() -> Bool {
+        return  UIImagePickerController.isSourceTypeAvailable(UIImagePickerController.SourceType.camera)
+    }
+    
     // MARK: - IBAction methods
     @IBAction func back(_ sender: Any?) {
         self.navigationController?.popViewController(animated: true)
@@ -211,65 +255,36 @@ class RegisterEditMovieViewController: UIViewController {
     }
     
     @IBAction func save() {
-        if editingMovie == nil {
-            editingMovie = Movie(context: context)
-        }
-        editingMovie?.title = self.movieTitleTextField.text
-        editingMovie?.summary = self.movieSummaryTextView.text
-        if let rating = Double(currentRatingLabel.text!) {
-            editingMovie?.rating = rating
-        }
-        if pictureChanged {
-            if let image = coverImageView.image {
-                let imageData = image.jpegData(compressionQuality: 1.0)
-                editingMovie?.imageData = imageData
-            }
-        }
-        
-        if let hours = durationHoursTextField.text {
-            var hoursString = "\(hours)h"
-            if let minutes = durationMinutesTextField.text {
-                hoursString = "\(hoursString) \(minutes)min"
-            } else {
-                hoursString = "\(hoursString) \0min"
-            }
-            editingMovie?.duration = hoursString
-        } else {
-            if let minutes = durationMinutesTextField.text {
-                editingMovie?.duration = "0h \(minutes)min"
-            }
-        }
-        
-        editingMovie?.categories = selectedCategories as NSSet
+        createMovieToBeSaved()
         saveContext()
         
         navigationController?.popViewController(animated: true)
-        
     }
     
     @IBAction func selectPhoto() {
         
         let actionSheet = UIAlertController(title: "Capturar de onde?", message: nil, preferredStyle: .actionSheet)
         
-        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerController.SourceType.camera) {
+        if isCameraAvailable() {
             let cameraAction = UIAlertAction(title: "Câmera", style: .default) {[weak self] action in
                 self?.selectSourceType(sourceType: .camera)
             }
             actionSheet.addAction(cameraAction)
         }
+        
         let libraryAction = UIAlertAction(title: "Galeria", style: .default) {[weak self] action in
             self?.selectSourceType(sourceType: .photoLibrary)
         }
+        
         let cancelAction = UIAlertAction(title: "Cancelar", style: .cancel) {[weak self] action in
             self?.dismiss(animated: true, completion: nil)
         }
+        
         actionSheet.addAction(libraryAction)
         actionSheet.addAction(cancelAction)
         
         self.present(actionSheet, animated: true, completion: nil)
-        
     }
-    
 }
 
 extension RegisterEditMovieViewController: UICollectionViewDelegate {
@@ -321,7 +336,7 @@ extension RegisterEditMovieViewController: UICollectionViewDataSource {
         if let cell = cll as? MovieCategoryCollectionViewCell {
             let category = categories[idxPath.row]
             
-            cell.prepareCell(category: category)
+            cell.prepareCell(with: category)
             
             if selectedCategories.contains(category) {
                 cell.state = .selected

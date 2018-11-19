@@ -25,28 +25,28 @@ class MovieTableViewCell: UITableViewCell {
         super.awakeFromNib()
     }
 
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-    }
-    
     override func prepareForReuse() {
         self.coverImageView.image = nil        
     }
+}
+
+extension MovieTableViewCell: DataCell {
+    
+    typealias Element = Movie
     
     // MARK: - Public methods
-    
-    public func prepareCell(movie: Movie) {
-        self.titleLabel.text = movie.title
-        self.summaryLabel.text = movie.summary
+    func prepareCell(with object: Element) {
+        self.titleLabel.text = object.title
+        self.summaryLabel.text = object.summary
         if self.ratingLabel != nil {
-            self.ratingLabel.text = movie.formattedRating
+            self.ratingLabel.text = object.formattedRating
         }
         self.coverImageView.image = nil
-        if movie.image != nil {
-            self.coverImageView.image = movie.image
+        if object.image != nil {
+            self.coverImageView.image = object.image
         }
         if self.ratingView != nil {
-            self.ratingView.buildRating(value: movie.rating)
+            self.ratingView.buildRating(value: object.rating)
         }
     }
 }

@@ -102,7 +102,7 @@ extension MoviesTableViewController {
         
         let cll = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.cellIdentifier)
         if let cell = cll as? MovieTableViewCell {
-            cell.prepareCell(movie: movie)
+            cell.prepareCell(with: movie)
             return cell
         }
         

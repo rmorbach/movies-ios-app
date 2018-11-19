@@ -24,17 +24,17 @@ class MovieCategoryCollectionViewCell: UICollectionViewCell {
         didSet {
             switch state {
             case .selected:
-                print("selected")
                 self.alpha = 1.0
             case .unselected:
                 self.alpha = 0.2
-                print("unselected")
             }
         }
     }
-    
-    func prepareCell(category: Category) {
-        self.categoryLabel.text = category.name
+}
+extension MovieCategoryCollectionViewCell: DataCell {
+    typealias Element = Category
+    // MARK: - Public methods
+    func prepareCell(with object: Element) {
+        self.categoryLabel.text = object.name
     }
-    
 }
