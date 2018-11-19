@@ -17,5 +17,5 @@ struct ItunesApiResponse: Codable {
     let resultCount: Int
     
     let results: [ItunesMovie]
-        
+
 }

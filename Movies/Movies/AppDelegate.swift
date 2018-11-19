@@ -14,10 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        UNUserNotificationCenter.current().delegate = self
+    func application(_ app: UIApplication, didFinishLaunchingWithOptions ops: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         self.applySettings()
         self.preloadMovies()
         return true
@@ -42,13 +39,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 
                 for category in categories {
                     
-                    let alreadyInserted = insertedCategories.contains{ element in
+                    let alreadyInserted = insertedCategories.contains { element in
                         return element.name == category
                     }
                     
                     if alreadyInserted {
                     
-                        let insertedCategory = insertedCategories.filter{ $0.name == category }
+                        let insertedCategory = insertedCategories.filter { $0.name == category }
                         if insertedCategory.count > 0 {
                             movieCategories.insert(insertedCategory.first!)
                         }
@@ -60,18 +57,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     }
                 }
                 
-                let mv = Movie(context: context)
-                mv.title = movie.title
-                mv.rating = movie.rating ?? 0.0
-                mv.duration = movie.duration
+                let mov = Movie(context: context)
+                mov.title = movie.title
+                mov.rating = movie.rating ?? 0.0
+                mov.duration = movie.duration
                 
                 if let imgString = movie.image {
                     if let uiImage = UIImage(named: imgString) {
-                        mv.imageData = uiImage.jpegData(compressionQuality: 1.0)
+                        mov.imageData = uiImage.jpegData(compressionQuality: 1.0)
                     }
                 }
-                mv.summary = movie.summary ?? ""
-                mv.categories = movieCategories as NSSet
+                mov.summary = movie.summary ?? ""
+                mov.categories = movieCategories as NSSet
                 do {
                     try context.save()
                 } catch {
@@ -113,18 +110,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
-        // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
         self.applySettings()
     }
     
 }
-
-extension AppDelegate: UNUserNotificationCenterDelegate {
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        
-        
-        
-        completionHandler()
-    }
-}
-

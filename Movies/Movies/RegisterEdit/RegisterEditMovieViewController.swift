@@ -20,14 +20,14 @@ class RegisterEditMovieViewController: UIViewController {
     lazy var hourPickerView: UIPickerView = {
         let pkv = UIPickerView()
         pkv.delegate = self
-        pkv.dataSource = self;
+        pkv.dataSource = self
         return pkv
     }()
     
     lazy var minutesPickerView: UIPickerView = {
         let pkv = UIPickerView()
         pkv.delegate = self
-        pkv.dataSource = self;
+        pkv.dataSource = self
         return pkv
     }()
     
@@ -84,15 +84,24 @@ class RegisterEditMovieViewController: UIViewController {
         self.removerObservers()
     }
     
-    
     // MARK: - Private methods
     
     private func prepareTextFields() {
         let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 45))
-        let okBarButtonItem = UIBarButtonItem(title: "OK", style: UIBarButtonItem.Style.done, target: self, action: #selector(doneSelecting))
-        let cancelBarButtonItem = UIBarButtonItem(title: "Cancelar", style: UIBarButtonItem.Style.plain, target: self, action: #selector(cancelSelecting))
-        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.flexibleSpace, target: nil, action: nil)
-        toolbar.items = [cancelBarButtonItem, flexibleSpace, okBarButtonItem]
+        let okButton = UIBarButtonItem()
+        okButton.style = .done
+        okButton.title = "OK"
+        okButton.target = self
+        okButton.action = #selector(doneSelecting)
+        
+        let cancelButton = UIBarButtonItem()
+        cancelButton.title = "Cancelar"
+        cancelButton.style = .plain
+        cancelButton.target = self
+        cancelButton.action = #selector(cancelSelecting)
+        
+        let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        toolbar.items = [cancelButton, flexibleSpace, okButton]
         self.durationHoursTextField.inputView = hourPickerView
         self.durationHoursTextField.inputAccessoryView = toolbar
         
@@ -118,8 +127,15 @@ class RegisterEditMovieViewController: UIViewController {
     }
     
     private func addObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        let dntfc = NotificationCenter.default
+        let keyboardWillShowS = #selector(keyboardWillShow)
+        let keyboardWillHideS = #selector(keyboardWillHide)
+        
+        let keyboardWillShowN = UIResponder.keyboardWillShowNotification
+        let keyboardWillHideN = UIResponder.keyboardWillHideNotification
+        dntfc.addObserver(self, selector: keyboardWillShowS, name: keyboardWillShowN, object: nil)
+        dntfc.addObserver(self, selector: keyboardWillHideS, name: keyboardWillHideN, object: nil)
         
     }
     
@@ -132,7 +148,8 @@ class RegisterEditMovieViewController: UIViewController {
         guard let userInfo = notification.userInfo else {
             return
         }
-        guard let keyboardRect = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else{
+        
+        guard let keyboardRect = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
             return
         }
         self.scrollView.contentInset.bottom = keyboardRect.height
@@ -163,12 +180,12 @@ class RegisterEditMovieViewController: UIViewController {
     }
     
     private func showAddCategoryAlert() {
-        let alertController = UIAlertController(title: "Adicionar categoria", message: nil, preferredStyle: UIAlertController.Style.alert)
-        let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default) { [weak alertController] action in
+        let alertController = UIAlertController(title: "Adicionar categoria", message: nil, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default) { [weak alertController] action in
             let textfield = alertController?.textFields?.first
             self.saveCategory(named: textfield!.text!)
         }
-        let cancelAction = UIAlertAction(title: "Cancelar", style: UIAlertAction.Style.cancel, handler: nil);
+        let cancelAction = UIAlertAction(title: "Cancelar", style: .cancel, handler: nil)
         alertController.addTextField { textField in
             textField.placeholder = "Categoria"
         }
@@ -179,7 +196,7 @@ class RegisterEditMovieViewController: UIViewController {
     
     private func selectSourceType(sourceType: UIImagePickerController.SourceType) {
         let pickerViewController = UIImagePickerController()
-        pickerViewController.delegate = self;
+        pickerViewController.delegate = self
         pickerViewController.sourceType = sourceType
         self.present(pickerViewController, animated: true, completion: nil)
     }
@@ -235,22 +252,22 @@ class RegisterEditMovieViewController: UIViewController {
         let actionSheet = UIAlertController(title: "Capturar de onde?", message: nil, preferredStyle: .actionSheet)
         
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerController.SourceType.camera) {
-            let cameraAction = UIAlertAction(title: "Câmera", style: UIAlertAction.Style.default) {[weak self] action in
+            let cameraAction = UIAlertAction(title: "Câmera", style: .default) {[weak self] action in
                 self?.selectSourceType(sourceType: .camera)
             }
             actionSheet.addAction(cameraAction)
         }
-        let libraryAction = UIAlertAction(title: "Galeria", style: UIAlertAction.Style.default) {[weak self] action in
+        let libraryAction = UIAlertAction(title: "Galeria", style: .default) {[weak self] action in
             self?.selectSourceType(sourceType: .photoLibrary)
         }
-        let cancelAction = UIAlertAction(title: "Cancelar", style: UIAlertAction.Style.cancel) {[weak self] action in
+        let cancelAction = UIAlertAction(title: "Cancelar", style: .cancel) {[weak self] action in
             self?.dismiss(animated: true, completion: nil)
         }
         actionSheet.addAction(libraryAction)
         actionSheet.addAction(cancelAction)
         
         self.present(actionSheet, animated: true, completion: nil)
-    
+        
     }
     
 }
@@ -287,41 +304,45 @@ extension RegisterEditMovieViewController: UICollectionViewDataSource {
         return (counter > 0) ? counter + 1 : 1
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt idxPath: IndexPath) -> UICollectionViewCell {
         
         let counter = categories.count
         
         //Last cell of the list
-        if indexPath.row == counter {
-            return collectionView.dequeueReusableCell(withReuseIdentifier: "addCategoryCell", for: indexPath)
+        if idxPath.row == counter {
+            return collectionView.dequeueReusableCell(withReuseIdentifier: "addCategoryCell", for: idxPath)
         }
+        
+        let identifier = MovieCategoryCollectionViewCell.cellIdentifier
         
         //Regular cell
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieCategoryCollectionViewCell.cellIdentifier, for: indexPath) as? MovieCategoryCollectionViewCell else {
+        let cll = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: idxPath)
+        
+        if let cell = cll as? MovieCategoryCollectionViewCell {
+            let category = categories[idxPath.row]
+            
+            cell.prepareCell(category: category)
+            
+            if selectedCategories.contains(category) {
+                cell.state = .selected
+            } else {
+                cell.state = .unselected
+            }
+            return cell
+        } else {
             return UICollectionViewCell()
         }
-        let category = categories[indexPath.row]
-        
-        cell.prepareCell(category: category)
-        
-        if selectedCategories.contains(category) {
-            cell.state = .selected
-        } else {
-            cell.state = .unselected
-        }
-
-        return cell
     }
     
 }
 
 extension RegisterEditMovieViewController: UICollectionViewDelegateFlowLayout {
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(_ clV: UICollectionView, layout clVL: UICollectionViewLayout, sizeForItemAt idxP: IndexPath) -> CGSize {
         
         let counter = categories.count
         //Last cell of the list
-        if indexPath.row < counter {
+        if idxP.row < counter {
             return CGSize(width: 120, height: 40)
         }
         
@@ -330,7 +351,7 @@ extension RegisterEditMovieViewController: UICollectionViewDelegateFlowLayout {
 }
 
 extension RegisterEditMovieViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         guard let originalImage = info[.originalImage] as? UIImage else { return }
         let smallImage = originalImage.resizedTo(maxDimension: CGFloat(800))
         self.coverImageView.image = smallImage
@@ -345,7 +366,6 @@ extension RegisterEditMovieViewController: UINavigationControllerDelegate, UIIma
     
 }
 
-
 extension RegisterEditMovieViewController: UIPickerViewDataSource, UIPickerViewDelegate {
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         if pickerView == self.hourPickerView {
@@ -355,7 +375,7 @@ extension RegisterEditMovieViewController: UIPickerViewDataSource, UIPickerViewD
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-       return "\(row)"
+        return "\(row)"
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {

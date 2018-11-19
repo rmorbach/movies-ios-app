@@ -9,7 +9,7 @@
 import UIKit
 
 struct MovieFile: Codable {
-
+    
     let title: String
     let categories: [String]?
     let duration: String?
@@ -20,26 +20,26 @@ struct MovieFile: Codable {
     let items: [MovieFile]?
     
     var formattedRating: String {
-        get {
-            return "⭐️ \(rating ?? 0)"
-        }
+        return "⭐️ \(rating ?? 0)"
     }
     
     var formattedCategorie: String {
-        get {
-            if categories == nil || categories!.count <= 0 {
-                return "Não definido"
-            }
-            var s = "\(categories![0])"
-            for i in 1..<categories!.count {
-                s.append(" | \(categories![i])")
-            }
-            return s
+        guard let unwrapperCategories = categories else {
+            return "Não definido"
         }
+        if unwrapperCategories.count == 0 {
+            return "Não definido"
+        }
+        var categoriesNames = "\(unwrapperCategories[0])"
+        
+        for categoryName in 1..<unwrapperCategories.count {
+            categoriesNames.append(" | \(unwrapperCategories[categoryName])")
+        }
+        return categoriesNames
     }
     
     enum CodingKeys: String, CodingKey {
-        case title;
+        case title
         case categories
         case duration
         case rating
@@ -48,10 +48,9 @@ struct MovieFile: Codable {
         case itemType = "item_type"
         case items
     }
-    
 }
 
 enum ItemType: String, Codable {
-    case movie = "movie"
-    case list = "list"
+    case movie
+    case list
 }

@@ -13,11 +13,11 @@ extension UIViewController {
     var coreDataManager: CoreDataManager {
         return CoreDataManager.shared
     }
-    
+
     var context: NSManagedObjectContext {
         return coreDataManager.persistentContainer.viewContext
     }
-    
+
     func saveContext() {
         do {
             try context.save()
@@ -25,5 +25,5 @@ extension UIViewController {
             debugPrint(error)
         }
     }
-    
+
 }

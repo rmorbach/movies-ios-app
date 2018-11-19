@@ -10,14 +10,14 @@ import Foundation
 
 protocol DataProvider {
     
-    associatedtype T: Any
+    associatedtype ModelT: Any
     
-    typealias resultClosure = (_ error: Error?, _ result: [T]?)-> Void
+    typealias ResultClosure = (_ error: Error?, _ result: [ModelT]?) -> Void
     
-    func fetch(completion: resultClosure )->Void
+    func fetch(completion: ResultClosure)
     
-    func save(object: T)->Bool
+    func save(object: ModelT) -> Bool
     
-    func delete(object: T)->Bool
+    func delete(object: ModelT) -> Bool
     
 }

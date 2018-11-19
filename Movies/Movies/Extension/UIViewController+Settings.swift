@@ -9,9 +9,9 @@
 import UIKit
 
 extension UIViewController {
-    
+
     func applyLayoutSettings() {
         self.view.backgroundColor = UIViewController.themeColor
     }
-    
+
 }

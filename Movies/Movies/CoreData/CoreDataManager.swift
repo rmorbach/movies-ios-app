@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 
 class CoreDataManager: NSObject {
-
+    
     static let shared = CoreDataManager()
     
     let dataModelName = "Movies"
@@ -41,9 +41,7 @@ class CoreDataManager: NSObject {
     }
     
     var context: NSManagedObjectContext {
-        get {
-            return persistentContainer.viewContext
-        }
+        return persistentContainer.viewContext
     }
     
 }

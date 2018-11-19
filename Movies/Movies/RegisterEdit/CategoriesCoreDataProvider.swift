@@ -15,7 +15,7 @@ protocol CategoriesCoreDataProviderDelegate: NSObjectProtocol {
 
 class CategoriesCoreDataProvider: NSObject {
     
-    typealias T = Category
+    typealias ModelT = Category
 
     let coreDataManager = CoreDataManager.shared
     
@@ -31,26 +31,29 @@ class CategoriesCoreDataProvider: NSObject {
 
 extension CategoriesCoreDataProvider: DataProvider {
     
-    func save(object: T) -> Bool {
+    func save(object: ModelT) -> Bool {
         return false
     }
     
-    func delete(object: T) -> Bool {
+    func delete(object: ModelT) -> Bool {
         coreDataManager.context.delete(object)
         return true
     }
     
-    func fetch(completion: (Error?, [T]?) -> Void) {
+    func fetch(completion: (Error?, [ModelT]?) -> Void) {
         guard let fetchedObjects = fetchedResultController?.fetchedObjects else {
             
             let fetchRequest: NSFetchRequest<Category> = Category.fetchRequest()
             let sortTitleDescriptor = NSSortDescriptor(keyPath: \Category.name, ascending: true)
             
-            fetchRequest.sortDescriptors = [sortTitleDescriptor];
+            fetchRequest.sortDescriptors = [sortTitleDescriptor]
             
-            fetchedResultController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: coreDataManager.context, sectionNameKeyPath: nil, cacheName: nil)
+            let ctx = coreDataManager.context            
+            let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: ctx, sectionNameKeyPath: nil, cacheName: nil)
             
-            fetchedResultController?.delegate = self;
+            fetchedResultController = frc
+            
+            fetchedResultController?.delegate = self
             do {
                 try fetchedResultController?.performFetch()
                 completion(nil, fetchedResultController?.fetchedObjects)
@@ -67,10 +70,9 @@ extension CategoriesCoreDataProvider: DataProvider {
     
 }
 
-
 extension CategoriesCoreDataProvider: NSFetchedResultsControllerDelegate {
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+    typealias FTRC = NSFetchedResultsController<NSFetchRequestResult>
+    func controller(_ controller: FTRC, didChange obj: Any, at idx: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath nIdx: IndexPath?) {
         self.delegate?.dataDidChange()
     }
 }

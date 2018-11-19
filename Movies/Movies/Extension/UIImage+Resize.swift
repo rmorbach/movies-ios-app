@@ -8,7 +8,7 @@
 
 import UIKit
 extension UIImage {
-    
+
     func resizedTo(maxDimension: CGFloat) -> UIImage? {
         var smallSize: CGSize = self.size
         if  smallSize.width > smallSize.height {
@@ -22,12 +22,12 @@ extension UIImage {
             let newWidth = (smallSize.width / smallSize.height) * newHeight
             smallSize = CGSize(width: newWidth, height: newHeight)
         }
-        
+
         UIGraphicsBeginImageContext(smallSize)
         self.draw(in: CGRect(x: 0, y: 0, width: smallSize.width, height: smallSize.height))
         let smallImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return smallImage
     }
-    
+
 }

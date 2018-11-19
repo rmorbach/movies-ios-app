@@ -11,21 +11,20 @@ import UIKit
 class UserSettingsViewController: UIViewController {
 
     let userSettings = UserSettingsManager.shared
-    // MARK - IBOutlets
-    
+    // MARK: - IBOutlets
     @IBOutlet weak var themeColorStackView: UIStackView!
     @IBOutlet weak var autoPlaySwitch: UISwitch!
     @IBOutlet weak var themColorSegmentedControl: UISegmentedControl!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         arrangeStackView()
         let themeColor = userSettings.currentThemeColor()
-        
+
         switch themeColor {
         case .black:
             themColorSegmentedControl.selectedSegmentIndex = 0
@@ -34,17 +33,17 @@ class UserSettingsViewController: UIViewController {
         case .orange:
             themColorSegmentedControl.selectedSegmentIndex = 2
         }
-        
+
         let autoPlay = userSettings.autoPlay()
         autoPlaySwitch.setOn(autoPlay, animated: true)
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         appDelegate.applySettings()
     }
-    
+
     private func arrangeStackView() {
         if self.themeColorStackView == nil { return }
         if UIDevice.current.orientation.isLandscape {
@@ -56,13 +55,13 @@ class UserSettingsViewController: UIViewController {
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
        arrangeStackView()
     }
-    
-    // MARK - IBActions
+
+    // MARK: - IBActions
 
     @IBAction func changeAutoPlay(_ sender: UISwitch) {
         userSettings.changeAutoPlay(to: sender.isOn)
     }
-    
+
     @IBAction func changeThemeColor(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
         case 0:

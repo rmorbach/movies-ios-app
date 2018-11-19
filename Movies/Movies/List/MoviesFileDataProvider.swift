@@ -14,13 +14,12 @@ class MoviesFileDataProvider: DataProvider {
         
     func fetch(completion: (Error?, [MovieFile]?) -> Void) {
         guard let movieSet = NSDataAsset(name: assetName)?.data else {
-            //TODO - 
             return
         }
         do {
             let jsonDecoder = JSONDecoder()
             let movies = try jsonDecoder.decode([MovieFile].self, from: movieSet)
-            completion(nil, movies);
+            completion(nil, movies)
         } catch {
             completion(error, nil)
         }

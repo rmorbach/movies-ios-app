@@ -23,11 +23,11 @@ class MovieItemCollectionViewCell: UICollectionViewCell {
         super.awakeFromNib()        
     }
     
-    // Mark: -  IBOutlets    
+    // MARK: IBOutlets
     @IBOutlet weak var coverImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     
-    // Mark: -  Public methods
+    // MARK: - Public methods
     public func prepareCell(movie: Movie) {
         if movie.image != nil {
             self.coverImageView.image = movie.image

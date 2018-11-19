@@ -13,7 +13,7 @@ class MovieTableViewCell: UITableViewCell {
     //static let cellIdentifier = "movieRatingCell"
     static let cellIdentifier = "movieCell"
     
-    // Mark: -  IBOutlets
+    // MARK: - IBOutlets
     
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var coverImageView: UIImageView!
@@ -33,7 +33,7 @@ class MovieTableViewCell: UITableViewCell {
         self.coverImageView.image = nil        
     }
     
-    // Mark: -  Public methods
+    // MARK: - Public methods
     
     public func prepareCell(movie: Movie) {
         self.titleLabel.text = movie.title
@@ -49,6 +49,4 @@ class MovieTableViewCell: UITableViewCell {
             self.ratingView.buildRating(value: movie.rating)
         }
     }
-    
-
 }

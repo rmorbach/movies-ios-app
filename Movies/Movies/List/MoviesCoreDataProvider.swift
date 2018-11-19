@@ -10,12 +10,12 @@ import Foundation
 import CoreData
 
 protocol MoviesCoreDataProviderDelegate: NSObjectProtocol {
-    func dataDidChange();
+    func dataDidChange()
 }
 
 class MoviesCoreDataProvider: NSObject {
 
-    typealias T = Movie
+    typealias ModelT = Movie
     
     let coreDataManager = CoreDataManager.shared
     
@@ -23,36 +23,41 @@ class MoviesCoreDataProvider: NSObject {
     
     var fetchedResultController: NSFetchedResultsController<Movie>?
     
-    // MARK - Public methods
+    // MARK: - Public methods
     init(with delegate: MoviesCoreDataProviderDelegate) {
         self.delegate = delegate
     }
 
-    
 }
 
 extension MoviesCoreDataProvider: DataProvider {
     
-    func save(object: T) -> Bool {
+    func save(object: ModelT) -> Bool {
         return false
     }
     
-    func delete(object: T) -> Bool {
+    func delete(object: ModelT) -> Bool {
         coreDataManager.context.delete(object)
+        do {
+            try coreDataManager.context.save()            
+        } catch { }
         return true
     }
     
-    func fetch(completion: (Error?, [T]?) -> Void) {
+    func fetch(completion: (Error?, [ModelT]?) -> Void) {
         guard let fetchedObjects = fetchedResultController?.fetchedObjects else {
 
             let fetchRequest: NSFetchRequest<Movie> = Movie.fetchRequest()
             let sortTitleDescriptor = NSSortDescriptor(keyPath: \Movie.title, ascending: true)
             
-            fetchRequest.sortDescriptors = [sortTitleDescriptor];
+            fetchRequest.sortDescriptors = [sortTitleDescriptor]
             
-            fetchedResultController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: coreDataManager.context, sectionNameKeyPath: nil, cacheName: nil)
+            let ctx = coreDataManager.context
             
-            fetchedResultController?.delegate = self;
+            let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: ctx, sectionNameKeyPath: nil, cacheName: nil)
+            
+            fetchedResultController = frc
+            fetchedResultController?.delegate = self
             do {
                 try fetchedResultController?.performFetch()
                 completion(nil, fetchedResultController?.fetchedObjects)
@@ -69,11 +74,10 @@ extension MoviesCoreDataProvider: DataProvider {
     
 }
 
-
 extension MoviesCoreDataProvider: NSFetchedResultsControllerDelegate {
     
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+    typealias FTRC = NSFetchedResultsController<NSFetchRequestResult>
+    func controller(_ controller: FTRC, didChange obj: Any, at idx: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath nIdx: IndexPath?) {
         self.delegate?.dataDidChange()
     }
 }
-

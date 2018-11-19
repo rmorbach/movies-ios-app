@@ -20,18 +20,20 @@ class TraillerService {
     
     let apiBaseUrl = "https://itunes.apple.com/search?media=movie&entity=movie&term="
     
-    func trailerUrlFor(movie title: String, completion: @escaping (_ url: String?, _ error: ServiceError?)->Void) {
+    func trailerUrlFor(movie title: String, completion: @escaping (_ url: String?, _ error: ServiceError?) -> Void) {
         let urlString = apiBaseUrl + title
-        guard let formattedUrlString = urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlFragmentAllowed) else {
+        let fragmentedUrlCharacterSet = CharacterSet.urlFragmentAllowed
+        guard let fmtUrlS = urlString.addingPercentEncoding(withAllowedCharacters: fragmentedUrlCharacterSet) else {
             completion(nil, ServiceError.invalidUrl)
             return
         }
         
-        guard let movieUrl = URL(string: formattedUrlString) else {
+        guard let movieUrl = URL(string: fmtUrlS) else {
             completion(nil, ServiceError.invalidUrl)
             return
         }
-        Network.post(url: movieUrl, contentType: nil, accept: "text/javascript; charset=utf-8", payload: nil) { data, response, error in
+        
+        Network.post(url: movieUrl, contentType: nil, accept: "text/plain", payload: nil) { data, response, error in
             if error != nil {
                 completion(nil, ServiceError.unknown)
                 return
@@ -74,11 +76,9 @@ class TraillerService {
                 completion(nil, ServiceError.unknown)
                 return
             }
-            
-            
+
         }
 
-        
     }
     
 }

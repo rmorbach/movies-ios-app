@@ -10,8 +10,6 @@ import UIKit
 
 extension UIViewController {
     static var themeColor: UIColor {
-        get {
-           return UserSettingsManager.shared.getThemeColor()
-        }
+        return UserSettingsManager.shared.getThemeColor()
     }
 }

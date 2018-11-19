@@ -9,10 +9,10 @@
 import UIKit
 
 class MoviesPromoTableViewCell: UITableViewCell {
-
+    
     static let cellIdentifier = "moviesPromoCell"
     var movies = [Movie]()
-    // Mark: -  IBOutlets
+    // MARK: - IBOutlets
     @IBOutlet weak var moviesCollectionView: UICollectionView!
     
     override func awakeFromNib() {
@@ -20,10 +20,10 @@ class MoviesPromoTableViewCell: UITableViewCell {
         moviesCollectionView.dataSource = self
         
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
+        
         // Configure the view for the selected state
     }
     
@@ -33,24 +33,26 @@ class MoviesPromoTableViewCell: UITableViewCell {
     
     // MARK: - Public methods
     public func prepareCell(movie: Movie) {
-       
+        
     }
-
+    
 }
 
 extension MoviesPromoTableViewCell: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt idxPath: IndexPath) -> UICollectionViewCell {
         
-        if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieItemCollectionViewCell.cellIdentifier, for: indexPath) as? MovieItemCollectionViewCell {
-            let movie = movies[indexPath.row]
+        let cellIdentifier = MovieItemCollectionViewCell.cellIdentifier
+        
+        let cll = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: idxPath)
+        
+        if let cell = cll as? MovieItemCollectionViewCell {
+            let movie = movies[idxPath.row]
             cell.prepareCell(movie: movie)
             return cell
         }
         
-        
         return UICollectionViewCell()
     }
-    
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return movies.count

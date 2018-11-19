@@ -21,19 +21,19 @@ enum ThemeColor: String {
 }
 
 class UserSettingsManager {
-    
+
     static let shared = UserSettingsManager()
 
     let userDefaults = UserDefaults.standard
-    
+
     private init() { }
-    
+
     private func themeColorString() -> String? {
         return userDefaults.string(forKey: UDefaultKeys.themeColor)
     }
-    
-    // MARK - Public methods
-    
+
+    // MARK: - Public methods
+
     func currentThemeColor() -> ThemeColor {
         guard let colorOrder = themeColorString() else {
             return ThemeColor.black
@@ -42,11 +42,11 @@ class UserSettingsManager {
     }
     
     func getThemeColor() -> UIColor {
-        
+
         guard let colorOrder = themeColorString() else {
             return UIColor.black
         }
-        
+
         var themeColor = UIColor.black
         switch colorOrder {
         case ThemeColor.green.rawValue:
@@ -56,24 +56,19 @@ class UserSettingsManager {
         default:
             print("default")
         }
-        
+
         return themeColor
     }
-    
+
     func autoPlay() -> Bool {
         return userDefaults.bool(forKey: UDefaultKeys.autoPlay)
     }
-    
+
     func changeTheme(with color: ThemeColor) {
         userDefaults.set(color.rawValue, forKey: UDefaultKeys.themeColor)
     }
-    
+
     func changeAutoPlay(to autoPlay: Bool) {
         userDefaults.set(autoPlay, forKey: UDefaultKeys.autoPlay)
     }
-    
-    
-    
-    
-    
 }

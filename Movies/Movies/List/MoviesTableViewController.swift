@@ -21,7 +21,7 @@ class MoviesTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self;
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         //self.navigationController?.navigationBar.barTintColor = UIColor.blue
         moviesDataProvider = MoviesCoreDataProvider(with: self)
         loadMovies()
@@ -49,12 +49,14 @@ class MoviesTableViewController: UITableViewController {
     
     private func confirmDelete(at indexPath: IndexPath) {
         let movie = movies[indexPath.row]
+        let title = "Remover filme \(movie.title!)?"
         
-        let confirmActionSheet = UIAlertController(title: "Remover filme \(movie.title!)?", message:nil, preferredStyle: UIAlertController.Style.actionSheet);
-        let deleteAction = UIAlertAction(title: "Remover", style: UIAlertAction.Style.destructive) {[weak self] action in
-            let _ = self?.moviesDataProvider?.delete(object: movie)
+        let confirmActionSheet = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
+        
+        let deleteAction = UIAlertAction(title: "Remover", style: .destructive) {[weak self] action in
+            _ = self?.moviesDataProvider?.delete(object: movie)
         }
-        let dismissAction = UIAlertAction(title: "Cancelar", style: UIAlertAction.Style.default) { action in
+        let dismissAction = UIAlertAction(title: "Cancelar", style: .default) { action in
             self.dismiss(animated: true, completion: nil)
         }
         
@@ -98,7 +100,8 @@ extension MoviesTableViewController {
         
         let movie = movies[indexPath.row]
         
-        if let cell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.cellIdentifier) as? MovieTableViewCell {
+        let cll = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.cellIdentifier)
+        if let cell = cll as? MovieTableViewCell {
             cell.prepareCell(movie: movie)
             return cell
         }
@@ -112,9 +115,9 @@ extension MoviesTableViewController {
         return true
     }
     
-    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+    override func tableView(_ tableView: UITableView, editActionsForRowAt idxP: IndexPath) -> [UITableViewRowAction]? {
         
-        let deleteAction = UITableViewRowAction(style: UITableViewRowAction.Style.destructive, title: "Excluir") {[weak self] row, indexPath in
+        let deleteAction = UITableViewRowAction(style: .destructive, title: "Excluir") {[weak self] row, indexPath in
             self?.confirmDelete(at: indexPath)
         }
         return [deleteAction]
