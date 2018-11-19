@@ -19,7 +19,9 @@ extension Movie {
     var formattedCategorie: String {
         get {
             let categories = Array<Category>(self.categories as! Set<Category>)
-            let formatted = categories.map { $0.name! }
+            let sorted = categories.sorted { return $0.name! < $1.name! }
+            
+            let formatted = sorted.map { $0.name! }
             return formatted.joined(separator: "|")
         }
     }

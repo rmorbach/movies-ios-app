@@ -1,5 +1,5 @@
 //
-//  MoviesCoreDataProvider.swift
+//  CategoriesDataProvider.swift
 //  Movies
 //
 //  Created by Rodrigo Morbach on 19/11/18.
@@ -9,29 +9,27 @@
 import Foundation
 import CoreData
 
-protocol MoviesCoreDataProviderDelegate: NSObjectProtocol {
-    func dataDidChange();
+protocol CategoriesCoreDataProviderDelegate: NSObjectProtocol {
+    func dataDidChange()
 }
 
-class MoviesCoreDataProvider: NSObject {
-
-    typealias T = Movie
+class CategoriesCoreDataProvider: NSObject {
     
+    typealias T = Category
+
     let coreDataManager = CoreDataManager.shared
     
-    weak var delegate: MoviesCoreDataProviderDelegate?
+    weak var delegate: CategoriesCoreDataProviderDelegate?
     
-    var fetchedResultController: NSFetchedResultsController<Movie>?
+    var fetchedResultController: NSFetchedResultsController<Category>?
     
-    // MARK - Public methods
-    init(with delegate: MoviesCoreDataProviderDelegate) {
+    init(delegate: CategoriesCoreDataProviderDelegate) {
         self.delegate = delegate
     }
-
     
 }
 
-extension MoviesCoreDataProvider: DataProvider {
+extension CategoriesCoreDataProvider: DataProvider {
     
     func save(object: T) -> Bool {
         return false
@@ -44,9 +42,9 @@ extension MoviesCoreDataProvider: DataProvider {
     
     func fetch(completion: (Error?, [T]?) -> Void) {
         guard let fetchedObjects = fetchedResultController?.fetchedObjects else {
-
-            let fetchRequest: NSFetchRequest<Movie> = Movie.fetchRequest()
-            let sortTitleDescriptor = NSSortDescriptor(keyPath: \Movie.title, ascending: true)
+            
+            let fetchRequest: NSFetchRequest<Category> = Category.fetchRequest()
+            let sortTitleDescriptor = NSSortDescriptor(keyPath: \Category.name, ascending: true)
             
             fetchRequest.sortDescriptors = [sortTitleDescriptor];
             
@@ -59,7 +57,7 @@ extension MoviesCoreDataProvider: DataProvider {
             } catch {
                 completion(error, nil)
             }
-
+            
             return
         }
         
@@ -70,10 +68,9 @@ extension MoviesCoreDataProvider: DataProvider {
 }
 
 
-extension MoviesCoreDataProvider: NSFetchedResultsControllerDelegate {
+extension CategoriesCoreDataProvider: NSFetchedResultsControllerDelegate {
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         self.delegate?.dataDidChange()
     }
 }
-

@@ -569,7 +569,7 @@
                                                 <rect key="frame" x="169" y="81.5" width="37" height="37"/>
                                                 <color key="color" red="1" green="0.78828127069999998" blue="0.26838666290000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             </activityIndicatorView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Resumo" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gp0-o5-gqf">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sinopse" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gp0-o5-gqf">
                                                 <rect key="frame" x="16" y="283" width="343" height="24"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -626,15 +626,15 @@
                                                 <exclude reference="nZi-dg-Y0w"/>
                                             </mask>
                                             <mask key="constraints">
+                                                <exclude reference="aXn-8c-DdD"/>
+                                                <exclude reference="dOP-5B-78e"/>
+                                                <exclude reference="3zs-i8-9sA"/>
+                                                <exclude reference="4GC-jc-Mk3"/>
                                                 <exclude reference="00x-Oe-mOr"/>
                                                 <exclude reference="42L-3j-nZa"/>
                                                 <exclude reference="VNV-HW-fhj"/>
                                                 <exclude reference="XTC-7o-dX6"/>
                                                 <exclude reference="ma0-fQ-QgG"/>
-                                                <exclude reference="aXn-8c-DdD"/>
-                                                <exclude reference="dOP-5B-78e"/>
-                                                <exclude reference="3zs-i8-9sA"/>
-                                                <exclude reference="4GC-jc-Mk3"/>
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=compact">
@@ -643,23 +643,23 @@
                                                 <exclude reference="sJG-vK-e2A"/>
                                             </mask>
                                             <mask key="constraints">
+                                                <exclude reference="F8v-Yy-HxQ"/>
+                                                <include reference="aXn-8c-DdD"/>
+                                                <include reference="dOP-5B-78e"/>
                                                 <include reference="42L-3j-nZa"/>
                                                 <include reference="VNV-HW-fhj"/>
                                                 <include reference="XTC-7o-dX6"/>
                                                 <include reference="ma0-fQ-QgG"/>
-                                                <exclude reference="F8v-Yy-HxQ"/>
-                                                <include reference="aXn-8c-DdD"/>
-                                                <include reference="dOP-5B-78e"/>
                                             </mask>
                                         </variation>
                                         <variation key="heightClass=compact-widthClass=compact">
                                             <mask key="constraints">
-                                                <include reference="00x-Oe-mOr"/>
-                                                <exclude reference="42L-3j-nZa"/>
                                                 <include reference="3zs-i8-9sA"/>
                                                 <include reference="4GC-jc-Mk3"/>
                                                 <exclude reference="aaG-xd-6Ou"/>
                                                 <exclude reference="tq1-gI-LfA"/>
+                                                <include reference="00x-Oe-mOr"/>
+                                                <exclude reference="42L-3j-nZa"/>
                                             </mask>
                                         </variation>
                                     </view>

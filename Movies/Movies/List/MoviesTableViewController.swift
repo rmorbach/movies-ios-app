@@ -13,7 +13,7 @@ class MoviesTableViewController: UITableViewController {
     
     var selectedMovie: Movie?
     
-    let moviesDataProvider = MoviesCoreDataProvider.shared
+    var moviesDataProvider: MoviesCoreDataProvider?
     
     var movies = [Movie]()
     
@@ -23,7 +23,7 @@ class MoviesTableViewController: UITableViewController {
         super.viewDidLoad()
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self;
         //self.navigationController?.navigationBar.barTintColor = UIColor.blue
-        moviesDataProvider.add(delegate: self)
+        moviesDataProvider = MoviesCoreDataProvider(with: self)
         loadMovies()
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -34,7 +34,7 @@ class MoviesTableViewController: UITableViewController {
     // MARK: - Private methods
     private func loadMovies() {
         
-        moviesDataProvider.fetch { [weak self] error, loadedMovies in
+        moviesDataProvider?.fetch { [weak self] error, loadedMovies in
             if error == nil {
                 self?.movies = loadedMovies ?? []
                 DispatchQueue.main.async {
@@ -52,7 +52,7 @@ class MoviesTableViewController: UITableViewController {
         
         let confirmActionSheet = UIAlertController(title: "Remover filme \(movie.title!)?", message:nil, preferredStyle: UIAlertController.Style.actionSheet);
         let deleteAction = UIAlertAction(title: "Remover", style: UIAlertAction.Style.destructive) {[weak self] action in
-            let _ = self?.moviesDataProvider.delete(object: movie)
+            let _ = self?.moviesDataProvider?.delete(object: movie)
         }
         let dismissAction = UIAlertAction(title: "Cancelar", style: UIAlertAction.Style.default) { action in
             self.dismiss(animated: true, completion: nil)

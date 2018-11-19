@@ -12,9 +12,10 @@ import CoreData
 class RegisterEditMovieViewController: UIViewController {
     
     var editingMovie: Movie?
-    var fetchedCategoriesResultController: NSFetchedResultsController<Category>?
     var selectedCategories = Set<Category>()
     var pictureChanged = false
+    var categoriesDataProvider: CategoriesCoreDataProvider?
+    var categories = [Category]()
     
     lazy var hourPickerView: UIPickerView = {
         let pkv = UIPickerView()
@@ -30,9 +31,8 @@ class RegisterEditMovieViewController: UIViewController {
         return pkv
     }()
     
-    @IBOutlet weak var durationMinutesTextField: UITextField!
     // MARK: - IBOutlets
-    
+    @IBOutlet weak var durationMinutesTextField: UITextField!
     @IBOutlet weak var movieTitleTextField: UITextField!
     @IBOutlet weak var movieCategoriesTextField: UITextField!
     @IBOutlet weak var movieRatingSlider: UISlider!
@@ -57,7 +57,7 @@ class RegisterEditMovieViewController: UIViewController {
                 selectedCategories = setCategories
             }
         }
-        
+        categoriesDataProvider = CategoriesCoreDataProvider(delegate: self)
         prepareTextFields()
         loadCategories()
     }
@@ -145,26 +145,23 @@ class RegisterEditMovieViewController: UIViewController {
     }
     
     private func loadCategories() {
-        let fetchRequest: NSFetchRequest<Category> = Category.fetchRequest()
-        let sortNameDescriptor = NSSortDescriptor(keyPath: \Category.name, ascending: true)
-        fetchRequest.sortDescriptors = [sortNameDescriptor];
-        
-        fetchedCategoriesResultController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataManager.shared.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
-        
-        fetchedCategoriesResultController?.delegate = self
-        
-        do {
-            try fetchedCategoriesResultController?.performFetch()
-        } catch {
-            print(error)
-        }
+        categoriesDataProvider?.fetch(completion: { [weak self] error, loadedCategories in
+            if error == nil {
+                self?.categories = loadedCategories ?? []
+                DispatchQueue.main.async {
+                    self?.categoriesCollectionView.reloadData()
+                }
+            }
+        })
     }
+    
     private func saveCategory(named: String) {
         let category = Category(context: context)
         category.name = named
         saveContext()
         self.categoriesCollectionView.reloadData()
     }
+    
     private func showAddCategoryAlert() {
         let alertController = UIAlertController(title: "Adicionar categoria", message: nil, preferredStyle: UIAlertController.Style.alert)
         let okAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default) { [weak alertController] action in
@@ -234,8 +231,7 @@ class RegisterEditMovieViewController: UIViewController {
     }
     
     @IBAction func selectPhoto() {
-    
-    
+        
         let actionSheet = UIAlertController(title: "Capturar de onde?", message: nil, preferredStyle: .actionSheet)
         
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerController.SourceType.camera) {
@@ -265,9 +261,7 @@ extension RegisterEditMovieViewController: UICollectionViewDelegate {
             return
         }
         if let categoryCell = cell as? MovieCategoryCollectionViewCell {
-            guard let category = fetchedCategoriesResultController?.object(at: indexPath) else {
-                return
-            }
+            let category = categories[indexPath.row]
             
             if selectedCategories.contains(category) {
                 selectedCategories.remove(category)
@@ -276,8 +270,6 @@ extension RegisterEditMovieViewController: UICollectionViewDelegate {
                 selectedCategories.insert(category)
                 categoryCell.state = .selected
             }
-            
-            //TODO
         } else {
             showAddCategoryAlert()
         }
@@ -291,17 +283,13 @@ extension RegisterEditMovieViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // +1 to show add category cell
-        guard let counter = fetchedCategoriesResultController?.fetchedObjects?.count else {
-            return 1
-        }
+        let counter = categories.count
         return (counter > 0) ? counter + 1 : 1
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        guard let counter = self.fetchedCategoriesResultController?.fetchedObjects?.count else {
-            return UICollectionViewCell()
-        }
+        let counter = categories.count
         
         //Last cell of the list
         if indexPath.row == counter {
@@ -312,9 +300,8 @@ extension RegisterEditMovieViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MovieCategoryCollectionViewCell.cellIdentifier, for: indexPath) as? MovieCategoryCollectionViewCell else {
             return UICollectionViewCell()
         }
-        guard let category = fetchedCategoriesResultController?.object(at: indexPath) else {
-            return UICollectionViewCell()
-        }
+        let category = categories[indexPath.row]
+        
         cell.prepareCell(category: category)
         
         if selectedCategories.contains(category) {
@@ -329,24 +316,16 @@ extension RegisterEditMovieViewController: UICollectionViewDataSource {
 }
 
 extension RegisterEditMovieViewController: UICollectionViewDelegateFlowLayout {
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        guard let counter = self.fetchedCategoriesResultController?.fetchedObjects?.count else {
-            return CGSize(width: 50, height: 40)
-        }
         
+        let counter = categories.count
         //Last cell of the list
         if indexPath.row < counter {
             return CGSize(width: 120, height: 40)
         }
+        
         return CGSize(width: 50, height: 40)
-    }
-}
-
-
-extension RegisterEditMovieViewController: NSFetchedResultsControllerDelegate {
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        self.categoriesCollectionView.reloadData()
     }
 }
 
@@ -389,5 +368,11 @@ extension RegisterEditMovieViewController: UIPickerViewDataSource, UIPickerViewD
         } else {
             self.durationMinutesTextField.text = "\(row)"
         }
+    }
+}
+
+extension RegisterEditMovieViewController: CategoriesCoreDataProviderDelegate {
+    func dataDidChange() {
+        self.loadCategories()
     }
 }

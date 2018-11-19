@@ -13,17 +13,15 @@ import AVKit
 
 class MovieDetailViewController: UIViewController {
 
-    var playerViewController: AVPlayerViewController?
     
-    var videoAlreadyShown = false
-    
-    public var movie: Movie?
-    let datePicker: UIDatePicker = {
+    // MARK: Private properties
+    private var playerViewController: AVPlayerViewController?
+    private var videoAlreadyShown = false
+    private let datePicker: UIDatePicker = {
         let dp = UIDatePicker()
         dp.datePickerMode = .dateAndTime
         return dp
     }()
-    
     private var schedule: Bool = false {
         didSet {
             self.scheduleSwitch.setOn(schedule, animated: true)
@@ -37,6 +35,9 @@ class MovieDetailViewController: UIViewController {
         }
     }
     
+    // MARK: Internals
+    var movie: Movie?
+    
     // MARK: IBOutlets
     
     @IBOutlet weak var coverImageView: UIImageView!
@@ -49,9 +50,9 @@ class MovieDetailViewController: UIViewController {
     @IBOutlet weak var scheduleStackView: UIStackView!
     @IBOutlet weak var scheduleTextField: UITextField!
     @IBOutlet weak var scheduleSwitch: UISwitch!
-    
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     @IBOutlet weak var scheduleDateStackView: UIStackView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         datePicker.minimumDate = Date()
@@ -83,16 +84,20 @@ class MovieDetailViewController: UIViewController {
     // MARK: - Private methods
     private func buildScreen() {
         guard let movie = self.movie else { return }
+        
         if movie.image != nil {
             self.coverImageView.image = movie.image
         }
+        
         self.titleLabel.text = movie.title
         self.ratingLabel.text = movie.formattedRating
         self.categoriesLabel.text = movie.formattedCategorie
         self.durationLabel.text = movie.duration ?? ""
+        
         if self.summaryLabel != nil {
             self.summaryLabel.text = movie.summary ?? ""
         }
+        
         if self.summaryTextView != nil {
             self.summaryTextView.text = movie.summary ?? ""
         }
@@ -119,7 +124,6 @@ class MovieDetailViewController: UIViewController {
     }
     
     private func scheduleMovie(with identifier: String) {
-        
         let content = UNMutableNotificationContent()
         content.title = "Lembrete 📽"
         content.body = "Tá na hora de assistir \(movie!.title!)"
@@ -130,9 +134,7 @@ class MovieDetailViewController: UIViewController {
         let components = Calendar.current.dateComponents([.month, .year, .day, .hour, .minute], from: datePicker.date)
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
-        UNUserNotificationCenter.current().add(request) { error in
-            
-        }
+        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
             
     }
     
@@ -171,8 +173,10 @@ class MovieDetailViewController: UIViewController {
         guard let pedingIdentifer = movie?.notification?.id else {
             return
         }
+        
         movie!.notification = nil
         saveContext()
+        
         UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [pedingIdentifer])
     }
     
@@ -191,8 +195,7 @@ class MovieDetailViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
 
-    @objc func doneSelectingDate() {
-        
+    @objc private func doneSelectingDate() {
         scheduleTextField.text = datePicker.date.format
         if movie?.notification == nil {
             movie?.notification = Notification(context: context)
@@ -204,7 +207,8 @@ class MovieDetailViewController: UIViewController {
         scheduleMovie(with: id)
         cancelSelectingDate()
     }
-    @objc func cancelSelectingDate() {
+    
+    @objc private func cancelSelectingDate() {
         view.endEditing(true)
     }
     

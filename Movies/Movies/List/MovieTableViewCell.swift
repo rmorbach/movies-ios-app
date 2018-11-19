@@ -46,7 +46,7 @@ class MovieTableViewCell: UITableViewCell {
             self.coverImageView.image = movie.image
         }
         if self.ratingView != nil {
-            self.ratingView.buildRating(value: movie.rating ?? 10.0)
+            self.ratingView.buildRating(value: movie.rating)
         }
     }
     

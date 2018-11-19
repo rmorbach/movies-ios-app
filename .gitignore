@@ -19,6 +19,8 @@ DerivedData/
 *.xccheckout
 *.xcscmblueprint
 
+Pods/
+
 ## Obj-C/Swift specific
 *.hmap
 *.ipa
