@@ -1,0 +1,37 @@
+/*
+ Localizable.strings
+ Movies
+ 
+ Created by Rodrigo Morbach on 19/11/18.
+ Copyright © 2018 Movile. All rights reserved.
+ */
+"OK" = "OK";
+"CANCEL" = "Cancelar";
+"REMINDER" = "Lembre";
+"ERROR" = "Erro";
+"SETTINGS" = "Configurações";
+"CATEGORY" = "Categoria";
+"DELETE" = "Remover";
+"SAD" = "😢";
+
+"CAMERA" = "Câmera";
+"PHOTO_SOURCE_MESSAGE" = "Escolher de onde?";
+"PHOTO_SOURCE_GALLERY" = "Galeria";
+
+
+"NOTIFICATION_ANSWER_OK" = "Assistir agora!";
+"NOTIFICATION_DENIED" = "Você precisa habilitar as notificações para que possamos te lembrar de assistir um filme";
+
+"NOTIFICATION_TITLE" = "Lembrete de filme 📽";
+"NOTIFICATION_MESSAGE" = "Está na hora de assistir %@";
+
+"DELETE_MOVIE_CONFIRM" = "Deseja realmente remover %@?";
+
+"EDIT_MOVIE_TITLE" = "Editar filme";
+"ADD_MOVIE_TITLE" = "Cadastrar filme";
+
+"ADD_CATEGORY_TITLE" = "Adicionar categoria";
+
+"RESOURCE_NOT_FOUND" = "Recurso não encontrado";
+"FAIL_PARSE" = "Falha ao tratar dados";
+"EMPTY_RESPONSE" = "Resposta vazia";

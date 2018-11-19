@@ -49,14 +49,14 @@ class MoviesTableViewController: UITableViewController {
     
     private func confirmDelete(at indexPath: IndexPath) {
         let movie = movies[indexPath.row]
-        let title = "Remover filme \(movie.title!)?"
+        let title = Localization.deleteMovieConfirm(movie.title!)
         
         let confirmActionSheet = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
         
-        let deleteAction = UIAlertAction(title: "Remover", style: .destructive) {[weak self] action in
+        let deleteAction = UIAlertAction(title: Localization.delete, style: .destructive) {[weak self] action in
             _ = self?.moviesDataProvider?.delete(object: movie)
         }
-        let dismissAction = UIAlertAction(title: "Cancelar", style: .default) { action in
+        let dismissAction = UIAlertAction(title: Localization.cancel, style: .default) { action in
             self.dismiss(animated: true, completion: nil)
         }
         

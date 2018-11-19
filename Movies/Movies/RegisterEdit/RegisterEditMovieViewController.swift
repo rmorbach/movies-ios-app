@@ -72,10 +72,10 @@ class RegisterEditMovieViewController: UIViewController {
         self.movieRatingSlider.setValue(Float(rating), animated: true)
         
         guard let movieToEdit = editingMovie else {
-            self.title = "Cadastrar filme"
+            self.title = Localization.addMovieTitle
             return
         }
-        self.title = "Editar filme"
+        self.title = Localization.editMovieTitle
         buildScreen(movie: movieToEdit)
     }
     
@@ -90,12 +90,12 @@ class RegisterEditMovieViewController: UIViewController {
         let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 45))
         let okButton = UIBarButtonItem()
         okButton.style = .done
-        okButton.title = "OK"
+        okButton.title = Localization.ok
         okButton.target = self
         okButton.action = #selector(doneSelecting)
         
         let cancelButton = UIBarButtonItem()
-        cancelButton.title = "Cancelar"
+        cancelButton.title = Localization.cancel
         cancelButton.style = .plain
         cancelButton.target = self
         cancelButton.action = #selector(cancelSelecting)
@@ -180,14 +180,14 @@ class RegisterEditMovieViewController: UIViewController {
     }
     
     private func showAddCategoryAlert() {
-        let alertController = UIAlertController(title: "Adicionar categoria", message: nil, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default) { [weak alertController] action in
+        let alertController = UIAlertController(title: Localization.addCategoryTitle, message: nil, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: Localization.ok, style: .default) { [weak alertController] action in
             let textfield = alertController?.textFields?.first
             self.saveCategory(named: textfield!.text!)
         }
-        let cancelAction = UIAlertAction(title: "Cancelar", style: .cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: Localization.cancel, style: .cancel, handler: nil)
         alertController.addTextField { textField in
-            textField.placeholder = "Categoria"
+            textField.placeholder = Localization.category
         }
         alertController.addAction(okAction)
         alertController.addAction(cancelAction)
@@ -263,20 +263,20 @@ class RegisterEditMovieViewController: UIViewController {
     
     @IBAction func selectPhoto() {
         
-        let actionSheet = UIAlertController(title: "Capturar de onde?", message: nil, preferredStyle: .actionSheet)
+        let actionSheet = UIAlertController(title: Localization.photoSourceMessage, message: nil, preferredStyle: .actionSheet)
         
         if isCameraAvailable() {
-            let cameraAction = UIAlertAction(title: "Câmera", style: .default) {[weak self] action in
+            let cameraAction = UIAlertAction(title: Localization.camera, style: .default) {[weak self] action in
                 self?.selectSourceType(sourceType: .camera)
             }
             actionSheet.addAction(cameraAction)
         }
         
-        let libraryAction = UIAlertAction(title: "Galeria", style: .default) {[weak self] action in
+        let libraryAction = UIAlertAction(title: Localization.photoSourceGallery, style: .default) {[weak self] action in
             self?.selectSourceType(sourceType: .photoLibrary)
         }
         
-        let cancelAction = UIAlertAction(title: "Cancelar", style: .cancel) {[weak self] action in
+        let cancelAction = UIAlertAction(title: Localization.cancel, style: .cancel) {[weak self] action in
             self?.dismiss(animated: true, completion: nil)
         }
         

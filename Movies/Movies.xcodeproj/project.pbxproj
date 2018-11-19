@@ -10,6 +10,8 @@
 		5E1893C321A2BAC600184ED6 /* MoviesCoreDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E1893C221A2BAC600184ED6 /* MoviesCoreDataProvider.swift */; };
 		5E1893C521A2C83600184ED6 /* CategoriesCoreDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E1893C421A2C83600184ED6 /* CategoriesCoreDataProvider.swift */; };
 		5E1893C821A3292600184ED6 /* DataCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E1893C721A3292600184ED6 /* DataCell.swift */; };
+		5E1893CD21A379C700184ED6 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5E1893CF21A379C700184ED6 /* Localizable.strings */; };
+		5E1893D721A37D8F00184ED6 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E1893D621A37D8E00184ED6 /* Strings.swift */; };
 		5E25405B218F2CF3008A14B6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E25405A218F2CF3008A14B6 /* AppDelegate.swift */; };
 		5E25405D218F2CF3008A14B6 /* MovieDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E25405C218F2CF3008A14B6 /* MovieDetailViewController.swift */; };
 		5E254060218F2CF3008A14B6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E25405E218F2CF3008A14B6 /* Main.storyboard */; };
@@ -54,6 +56,11 @@
 		5E1893C221A2BAC600184ED6 /* MoviesCoreDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoviesCoreDataProvider.swift; sourceTree = "<group>"; };
 		5E1893C421A2C83600184ED6 /* CategoriesCoreDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoriesCoreDataProvider.swift; sourceTree = "<group>"; };
 		5E1893C721A3292600184ED6 /* DataCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataCell.swift; sourceTree = "<group>"; };
+		5E1893C921A376EA00184ED6 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Main.strings"; sourceTree = "<group>"; };
+		5E1893CA21A376EA00184ED6 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		5E1893CE21A379C700184ED6 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		5E1893D021A379D300184ED6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5E1893D621A37D8E00184ED6 /* Strings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		5E254057218F2CF3008A14B6 /* Movies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Movies.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E25405A218F2CF3008A14B6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5E25405C218F2CF3008A14B6 /* MovieDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailViewController.swift; sourceTree = "<group>"; };
@@ -154,6 +161,22 @@
 			path = Details;
 			sourceTree = "<group>";
 		};
+		5E1893D121A37A0100184ED6 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				5E1893D521A37D8E00184ED6 /* Generated */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		5E1893D521A37D8E00184ED6 /* Generated */ = {
+			isa = PBXGroup;
+			children = (
+				5E1893D621A37D8E00184ED6 /* Strings.swift */,
+			);
+			path = Generated;
+			sourceTree = "<group>";
+		};
 		5E25404E218F2CF3008A14B6 = {
 			isa = PBXGroup;
 			children = (
@@ -175,6 +198,7 @@
 		5E254059218F2CF3008A14B6 /* Movies */ = {
 			isa = PBXGroup;
 			children = (
+				5E1893D121A37A0100184ED6 /* Common */,
 				5E1893C021A2B93800184ED6 /* Details */,
 				5E1893BF21A2B92E00184ED6 /* RegisterEdit */,
 				5E1893BE21A2B92600184ED6 /* List */,
@@ -195,6 +219,7 @@
 			children = (
 				5E254066218F2CF4008A14B6 /* Info.plist */,
 				5E254061218F2CF4008A14B6 /* Assets.xcassets */,
+				5E1893CF21A379C700184ED6 /* Localizable.strings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -285,6 +310,7 @@
 				5E254054218F2CF3008A14B6 /* Frameworks */,
 				5E254055218F2CF3008A14B6 /* Resources */,
 				5E1893C621A2D51800184ED6 /* SwiftLint */,
+				5E1893D221A37B9F00184ED6 /* SwiftGen */,
 			);
 			buildRules = (
 			);
@@ -333,6 +359,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5E1893CD21A379C700184ED6 /* Localizable.strings in Resources */,
 				5EEACA71219F7885003218ED /* Settings.bundle in Resources */,
 				5E254065218F2CF4008A14B6 /* LaunchScreen.storyboard in Resources */,
 				5E254062218F2CF4008A14B6 /* Assets.xcassets in Resources */,
@@ -361,6 +388,24 @@
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\ncd Movies/\n${PODS_ROOT}/SwiftLint/swiftlint\n";
 		};
+		5E1893D221A37B9F00184ED6 /* SwiftGen */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftGen;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\n#cd Movies/\n#$PODS_ROOT/SwiftGen/bin/swiftgen strings --output Common/Generated/Strings.swift Resources/en.lproj/Localizable.strings --param enumName=Localization -t flat-swift4\n";
+		};
 		FDADD766BB7CA6DB973B6C49 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -387,6 +432,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5EF574B6219DC4B500F0F190 /* UIViewController+CoreData.swift in Sources */,
+				5E1893D721A37D8F00184ED6 /* Strings.swift in Sources */,
 				5E254077218F3176008A14B6 /* MoviesTableViewController.swift in Sources */,
 				5EF574B8219DC4D400F0F190 /* String+Trim.swift in Sources */,
 				5E1893C821A3292600184ED6 /* DataCell.swift in Sources */,
@@ -424,10 +470,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		5E1893CF21A379C700184ED6 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				5E1893CE21A379C700184ED6 /* pt-BR */,
+				5E1893D021A379D300184ED6 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		5E25405E218F2CF3008A14B6 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				5E25405F218F2CF3008A14B6 /* Base */,
+				5E1893C921A376EA00184ED6 /* pt-BR */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -436,6 +492,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				5E254064218F2CF4008A14B6 /* Base */,
+				5E1893CA21A376EA00184ED6 /* pt-BR */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -447,6 +504,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -508,6 +566,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

@@ -118,12 +118,12 @@ class MovieDetailViewController: UIViewController {
         let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 45))
         let okButton = UIBarButtonItem()
         okButton.style = .done
-        okButton.title = "OK"
+        okButton.title = Localization.ok
         okButton.target = self
         okButton.action = #selector(doneSelectingDate)
         
         let cancelButton = UIBarButtonItem()
-        cancelButton.title = "Cancelar"
+        cancelButton.title = Localization.cancel
         cancelButton.style = .plain
         cancelButton.target = self
         cancelButton.action = #selector(cancelSelectingDate)
@@ -136,12 +136,11 @@ class MovieDetailViewController: UIViewController {
 
     private func scheduleMovie(with identifier: String) {
         let content = UNMutableNotificationContent()
-        content.title = "Lembrete 📽"
-        content.body = "Tá na hora de assistir \(movie!.title!)"
-        content.launchImageName = "avengers2"
+        content.title = Localization.notificationTitle
+        content.body = Localization.notificationMessage(movie!.title!)
 
         //Agrupa notificações
-        content.categoryIdentifier = "lembrete"
+        content.categoryIdentifier = "reminder"
         let components = Calendar.current.dateComponents([.month, .year, .day, .hour, .minute], from: datePicker.date)
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
         let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
@@ -164,8 +163,8 @@ class MovieDetailViewController: UIViewController {
             }
         }
 
-        let confirmAction = UNNotificationAction(identifier: "confirm", title: "Agora!", options: [.foreground])
-        let cancelAction = UNNotificationAction(identifier: "cancel", title: "Cancelar", options: [])
+        let confirmAction = UNNotificationAction(identifier: "confirm", title: Localization.notificationAnswerOk, options: [.foreground])
+        let cancelAction = UNNotificationAction(identifier: "cancel", title: Localization.cancel, options: [])
 
         let ctgOpts: UNNotificationCategoryOptions = [.customDismissAction]
 
@@ -198,13 +197,13 @@ class MovieDetailViewController: UIViewController {
 
     private func cancelShedule() {
         self.schedule = false
-        let message = "Você precisa habilitar as notificações para que possamos te lembrar de assistir um filme"
-        let alert = UIAlertController(title: "😢", message: message, preferredStyle: .alert)
-        let openSettingsAction = UIAlertAction(title: "Configurações", style: .default) { action in
+        let message = Localization.notificationDenied
+        let alert = UIAlertController(title: Localization.sad, message: message, preferredStyle: .alert)
+        let openSettingsAction = UIAlertAction(title: Localization.settings, style: .default) { action in
             guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
-        let cancelAction = UIAlertAction(title: "Cancelar", style: .cancel) {[weak self] action in
+        let cancelAction = UIAlertAction(title: Localization.cancel, style: .cancel) {[weak self] action in
             self?.dismiss(animated: true, completion: nil)
         }
         alert.addAction(openSettingsAction)
@@ -290,7 +289,7 @@ extension MovieDetailViewController {
                 self?.spinner.stopAnimating()
                 self?.spinner.isHidden = true
                 if error != nil {
-                    self?.showAlert(with: "Erro", message: error!.rawValue)
+                    self?.showAlert(with: Localization.error, message: error!.rawValue)
                     return
                 }
                 guard let url = URL(string: previewUrlString ?? "") else { return }

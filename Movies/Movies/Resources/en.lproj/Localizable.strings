@@ -1,0 +1,37 @@
+/*
+ Localizable.strings
+ Movies
+ 
+ Created by Rodrigo Morbach on 19/11/18.
+ Copyright © 2018 Movile. All rights reserved.
+ */
+"OK" = "OK";
+"CANCEL" = "Cancel";
+"REMINDER" = "Reminder";
+"ERROR" = "Error";
+"SETTINGS" = "Settings";
+"CATEGORY" = "Category";
+"DELETE" = "Delete";
+"SAD" = "😢";
+
+"CAMERA" = "Camera";
+"PHOTO_SOURCE_MESSAGE" = "Choose the source";
+"PHOTO_SOURCE_GALLERY" = "Galery";
+
+
+"NOTIFICATION_ANSWER_OK" = "Watch it now!";
+"NOTIFICATION_DENIED" = "You need to enable notifications in order to be reminded of a watching a movie";
+
+"NOTIFICATION_TITLE" = "Movie reminder 📽";
+"NOTIFICATION_MESSAGE" = "Time to watch %@";
+
+"DELETE_MOVIE_CONFIRM" = "Really wants to delete %@?";
+
+"EDIT_MOVIE_TITLE" = "Edit movie";
+"ADD_MOVIE_TITLE" = "Add movie";
+
+"ADD_CATEGORY_TITLE" = "Add category";
+
+"RESOURCE_NOT_FOUND" = "Resource not found";
+"FAIL_PARSE" = "Fail parsing data";
+"EMPTY_RESPONSE" = "Empty response";
