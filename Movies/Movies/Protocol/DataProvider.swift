@@ -10,7 +10,7 @@ import Foundation
 
 protocol DataProvider {
     
-    associatedtype T: Codable
+    associatedtype T: Any
     
     typealias resultClosure = (_ error: Error?, _ result: [T]?)-> Void
     

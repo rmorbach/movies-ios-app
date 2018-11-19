@@ -40,4 +40,10 @@ class CoreDataManager: NSObject {
         }
     }
     
+    var context: NSManagedObjectContext {
+        get {
+            return persistentContainer.viewContext
+        }
+    }
+    
 }

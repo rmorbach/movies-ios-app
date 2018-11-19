@@ -13,9 +13,9 @@ class MoviesTableViewController: UITableViewController {
     
     var selectedMovie: Movie?
     
-    var fetchedResultController: NSFetchedResultsController<Movie>?
+    let moviesDataProvider = MoviesCoreDataProvider.shared
     
-    @objc dynamic var p: Int = 0
+    var movies = [Movie]()
     
     @IBOutlet var emptyDataView: UIView!
     
@@ -23,6 +23,7 @@ class MoviesTableViewController: UITableViewController {
         super.viewDidLoad()
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self;
         //self.navigationController?.navigationBar.barTintColor = UIColor.blue
+        moviesDataProvider.add(delegate: self)
         loadMovies()
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -32,28 +33,26 @@ class MoviesTableViewController: UITableViewController {
     
     // MARK: - Private methods
     private func loadMovies() {
-        let fetchRequest: NSFetchRequest<Movie> = Movie.fetchRequest()
-        let sortTitleDescriptor = NSSortDescriptor(keyPath: \Movie.title, ascending: true)
         
-        fetchRequest.sortDescriptors = [sortTitleDescriptor];
-        
-        fetchedResultController = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
-        
-        fetchedResultController?.delegate = self;
-        do {
-            try fetchedResultController?.performFetch()
-        } catch {
-            print(error)
+        moviesDataProvider.fetch { [weak self] error, loadedMovies in
+            if error == nil {
+                self?.movies = loadedMovies ?? []
+                DispatchQueue.main.async {
+                    self?.tableView.reloadData()
+                }
+            } else {
+                debugPrint("Error fetching movies")
+            }
         }
+    
     }
     
     private func confirmDelete(at indexPath: IndexPath) {
-        guard let movie = self.fetchedResultController?.object(at: indexPath) else {
-            return
-        }
+        let movie = movies[indexPath.row]
+        
         let confirmActionSheet = UIAlertController(title: "Remover filme \(movie.title!)?", message:nil, preferredStyle: UIAlertController.Style.actionSheet);
         let deleteAction = UIAlertAction(title: "Remover", style: UIAlertAction.Style.destructive) {[weak self] action in
-            self?.context.delete(movie)
+            let _ = self?.moviesDataProvider.delete(object: movie)
         }
         let dismissAction = UIAlertAction(title: "Cancelar", style: UIAlertAction.Style.default) { action in
             self.dismiss(animated: true, completion: nil)
@@ -63,7 +62,7 @@ class MoviesTableViewController: UITableViewController {
         confirmActionSheet.addAction(dismissAction)
         self.present(confirmActionSheet, animated: true, completion: nil)
     }
-   
+    
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destVc = segue.destination as? MovieDetailViewController {
@@ -79,11 +78,10 @@ extension MoviesTableViewController: UIGestureRecognizerDelegate {}
 extension MoviesTableViewController {
     
     override func numberOfSections(in tableView: UITableView) -> Int {
+        
         self.tableView.backgroundView = nil
-        guard let counter = fetchedResultController?.fetchedObjects?.count else {
-            self.tableView.backgroundView = self.emptyDataView
-            return 0
-        }
+        let counter = movies.count
+        
         if counter == 0 {
             self.tableView.backgroundView = self.emptyDataView
             return 0
@@ -93,14 +91,12 @@ extension MoviesTableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return fetchedResultController?.fetchedObjects?.count ?? 0
+        return movies.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        guard let movie = self.fetchedResultController?.object(at: indexPath) else {
-            return UITableViewCell()
-        }
+        let movie = movies[indexPath.row]
         
         if let cell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.cellIdentifier) as? MovieTableViewCell {
             cell.prepareCell(movie: movie)
@@ -129,16 +125,14 @@ extension MoviesTableViewController {
 // MARK: - Table view delegate
 extension MoviesTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let movie = self.fetchedResultController?.object(at: indexPath) else { return }
+        let movie = movies[indexPath.row]
         self.selectedMovie = movie
         self.performSegue(withIdentifier: "movieDetailSegue", sender: nil)
     }
 }
 
-extension MoviesTableViewController: NSFetchedResultsControllerDelegate {
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        self.tableView.reloadData()
+extension MoviesTableViewController: MoviesCoreDataProviderDelegate {
+    func dataDidChange() {
+        self.loadMovies()
     }
 }
-
