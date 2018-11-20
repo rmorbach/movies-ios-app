@@ -356,11 +356,11 @@ extension RegisterEditMovieViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ clV: UICollectionView, layout clVL: UICollectionViewLayout, sizeForItemAt idxP: IndexPath) -> CGSize {
         
         let counter = categories.count
-        //Last cell of the list
+       
         if idxP.row < counter {
             return CGSize(width: 120, height: 40)
         }
-        
+        //Last cell of the list
         return CGSize(width: 50, height: 40)
     }
 }
@@ -375,7 +375,6 @@ extension RegisterEditMovieViewController: UINavigationControllerDelegate, UIIma
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        //pickerViewController.dismiss(animated: true, completion: nil)
         self.presentedViewController?.dismiss(animated: true, completion: nil)
     }
     

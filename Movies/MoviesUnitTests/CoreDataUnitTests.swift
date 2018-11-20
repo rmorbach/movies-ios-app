@@ -1,32 +1,54 @@
 //
-//  AppDelegate.swift
-//  Movies
+//  CoreDataUnitTests.swift
+//  MoviesUnitTests
 //
-//  Created by Rodrigo Morbach on 04/11/18.
+//  Created by Rodrigo Morbach on 19/11/18.
 //  Copyright © 2018 Movile. All rights reserved.
 //
 
-import UIKit
-import UserNotifications
+import XCTest
+@testable import Movies
 
-@UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class CoreDataUnitTests: XCTestCase {
 
-    var window: UIWindow?
+    typealias MovieCategory = Movies.Category
+    
+    override func setUp() {
+        insertMoviesInCoreData()
+        // Put setup code here. This method is called before the invocation of each test method in the class.
+    }
 
-    func application(_ app: UIApplication, didFinishLaunchingWithOptions ops: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        self.applySettings()
-        self.preloadMovies()
-        return true
+    override func tearDown() {
+        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        deleteMoviesFromCoreData()
     }
     
-    private func preloadMovies() {
-        
-        var insertedCategories = [Category]()
-        
-        if UserDefaults.standard.bool(forKey: "moviesLoaded") {
-            return
+    func testFetchPreloadedMoviesShouldPass() {
+        let expectation = XCTestExpectation(description: "Fetch expectation")
+        let moviesDataProvider = MoviesCoreDataProvider(with: self)
+        moviesDataProvider.fetch { error, moviesLoaded in
+            XCTAssertNil(error)
+            XCTAssertNotNil(moviesLoaded)
+            XCTAssertEqual(moviesLoaded?.count, 9)
+            expectation.fulfill()
         }
+        wait(for: [expectation], timeout: 2)
+    }
+
+    
+    private func deleteMoviesFromCoreData() {
+    
+        let moviesDataProvider = MoviesCoreDataProvider(with: self)
+        moviesDataProvider.fetch { error, moviesLoaded in
+            for movie in moviesLoaded! {
+                let _ = moviesDataProvider.delete(object: movie)
+            }
+        }
+    
+    }
+    
+    private func insertMoviesInCoreData() {
+        var insertedCategories = [MovieCategory]()
     
         let moviesDataProvider = MoviesFileDataProvider()
         let context = CoreDataManager.shared.persistentContainer.viewContext
@@ -35,7 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             for movie in mvs {
                 guard let categories = movie.categories else { continue }
                 
-                var movieCategories = Set<Category>()
+                var movieCategories = Set<MovieCategory>()
                 
                 for category in categories {
                     
@@ -44,7 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                     }
                     
                     if alreadyInserted {
-                    
+                        
                         let insertedCategory = insertedCategories.filter { $0.name == category }
                         if insertedCategory.count > 0 {
                             movieCategories.insert(insertedCategory.first!)
@@ -76,11 +98,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             }
         }
-        
-        UserDefaults.standard.set(true, forKey: "moviesLoaded")
     }
     
-    private func insertCategory(with name: String) -> Category? {
+    
+    private func insertCategory(with name: String) -> MovieCategory? {
         let context = CoreDataManager.shared.persistentContainer.viewContext
         let category = Category(context: context)
         category.name = name
@@ -92,24 +113,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return nil
         }
     }
-    
-    func applySettings() {
-        if let tabBarController = window?.rootViewController as? UITabBarController {
-            tabBarController.tabBar.barTintColor = UIViewController.themeColor
-            if tabBarController.viewControllers != nil {
-                for viewController in tabBarController.viewControllers! {
-                    if let nvc = viewController as? UINavigationController {
-                        nvc.navigationBar.barTintColor = UIViewController.themeColor
-                        //nvc.topViewController?.applyLayoutSettings()
-                    }
-                }
-            }
-        }
-        window?.backgroundColor = UIViewController.themeColor
-    }
 
-    func applicationWillEnterForeground(_ application: UIApplication) {
-        self.applySettings()
+}
+
+
+extension CoreDataUnitTests: MoviesCoreDataProviderDelegate {
+    func dataDidChange() {
+        // Ignore
     }
-    
 }

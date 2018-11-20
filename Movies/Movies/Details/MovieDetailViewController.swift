@@ -12,7 +12,7 @@ import AVFoundation
 import AVKit
 
 class MovieDetailViewController: UIViewController {
-
+    
     // MARK: Private properties
     private var playerViewController: AVPlayerViewController?
     private var videoAlreadyShown = false
@@ -25,20 +25,22 @@ class MovieDetailViewController: UIViewController {
     
     private var schedule: Bool = false {
         didSet {
-            self.scheduleSwitch.setOn(schedule, animated: true)
-            if schedule {
-                UIView.animate(withDuration: 0.4) {
-                    self.scheduleDateStackView.isHidden = false
+            DispatchQueue.main.async { [weak self] in
+                self?.scheduleSwitch.setOn(self?.schedule ?? false, animated: true)
+                if self!.schedule {
+                    UIView.animate(withDuration: 0.4) {
+                        self?.scheduleDateStackView.isHidden = false
+                    }
+                } else {
+                    self?.scheduleDateStackView.isHidden = true
                 }
-            } else {
-                self.scheduleDateStackView.isHidden = true
             }
         }
     }
     
     // MARK: Internals
     var movie: Movie?
-
+    
     // MARK: IBOutlets
     @IBOutlet weak var coverImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
@@ -75,7 +77,7 @@ class MovieDetailViewController: UIViewController {
             self.tryToPlay()
         }
     }
-
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if self.playerViewController != nil && self.playerViewController?.player != nil {
@@ -86,24 +88,24 @@ class MovieDetailViewController: UIViewController {
     // MARK: - Private methods
     private func buildScreen() {
         guard let movie = self.movie else { return }
-
+        
         if movie.image != nil {
             self.coverImageView.image = movie.image
         }
-
+        
         self.titleLabel.text = movie.title
         self.ratingLabel.text = movie.formattedRating
         self.categoriesLabel.text = movie.formattedCategorie
         self.durationLabel.text = movie.duration ?? ""
-
+        
         if self.summaryLabel != nil {
             self.summaryLabel.text = movie.summary ?? ""
         }
-
+        
         if self.summaryTextView != nil {
             self.summaryTextView.text = movie.summary ?? ""
         }
-
+        
         if movie.notification != nil {
             datePicker.date = movie.notification!.date!
             scheduleTextField.text = datePicker.date.format
@@ -111,9 +113,9 @@ class MovieDetailViewController: UIViewController {
         } else {
             self.schedule = false
         }
-
+        
     }
-
+    
     private func prepareTextField() {
         let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 45))
         let okButton = UIBarButtonItem()
@@ -127,75 +129,49 @@ class MovieDetailViewController: UIViewController {
         cancelButton.style = .plain
         cancelButton.target = self
         cancelButton.action = #selector(cancelSelectingDate)
-    
+        
         let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         toolbar.items = [cancelButton, flexibleSpace, okButton]
         self.scheduleTextField.inputView = datePicker
         self.scheduleTextField.inputAccessoryView = toolbar
     }
-
+    
     private func scheduleMovie(with identifier: String) {
-        let content = UNMutableNotificationContent()
-        content.title = Localization.notificationTitle
-        content.body = Localization.notificationMessage(movie!.title!)
-
-        //Agrupa notificações
-        content.categoryIdentifier = "reminder"
-        let components = Calendar.current.dateComponents([.month, .year, .day, .hour, .minute], from: datePicker.date)
-        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
-        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
-        UNUserNotificationCenter.current().add(request, withCompletionHandler: nil)
+        
+        let title = Localization.notificationTitle
+        let body = Localization.notificationMessage(movie!.title!)
+        let date = datePicker.date
+        NotificationManager.shared.scheduleNotificationTriggerDate(identifier: identifier, title: title, body: body, triggerDate: date)
     }
-
-    private func askNotificationPermission() {
-        let center = UNUserNotificationCenter.current()
-        center.getNotificationSettings { [weak self] settings in
-            switch settings.authorizationStatus {
-            case .authorized:
-                print("authorized")
-            case .denied:
-                print("denied")
-                self?.cancelShedule()
-            case .notDetermined:
-                print("notDetermined")
-            case .provisional:
-                print("provisional")
+    
+    private func checkNotificationPermission() {
+        
+        NotificationManager.shared.userHasGrantedPermission(completion: { [weak self] authorized in
+            if !authorized {
+                self?.cancelSchedule()
             }
-        }
-
-        let confirmAction = UNNotificationAction(identifier: "confirm", title: Localization.notificationAnswerOk, options: [.foreground])
-        let cancelAction = UNNotificationAction(identifier: "cancel", title: Localization.cancel, options: [])
-
-        let ctgOpts: UNNotificationCategoryOptions = [.customDismissAction]
-
-        let acts: [UNNotificationAction] = [confirmAction, cancelAction]
+        })
         
-        let idtf = "lembrete"
-        
-        let ctg = UNNotificationCategory(identifier: idtf, actions: acts, intentIdentifiers: [], hiddenPreviewsBodyPlaceholder: "", options: ctgOpts)
-
-        center.setNotificationCategories([ctg])
-
-        center.requestAuthorization(options: [.alert, .badge]) {[weak self] success, error in
+        NotificationManager.shared.requestAuthorization { [weak self] success in
             if !success {
-                self?.cancelShedule()
+                DispatchQueue.main.async {
+                    self?.cancelSchedule()
+                }
             }
         }
-
+        
     }
-
+    
     private func removePendingNotification() {
-        guard let pedingIdentifer = movie?.notification?.id else {
+        guard let pendingIdentifer = movie?.notification?.id else {
             return
         }
-
         movie!.notification = nil
         saveContext()
-
-        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: [pedingIdentifer])
+        NotificationManager.shared.removeNotification(identifiers: [pendingIdentifer])
     }
-
-    private func cancelShedule() {
+    
+    private func cancelSchedule() {
         self.schedule = false
         let message = Localization.notificationDenied
         let alert = UIAlertController(title: Localization.sad, message: message, preferredStyle: .alert)
@@ -210,7 +186,7 @@ class MovieDetailViewController: UIViewController {
         alert.addAction(cancelAction)
         present(alert, animated: true, completion: nil)
     }
-
+    
     @objc private func doneSelectingDate() {
         scheduleTextField.text = datePicker.date.format
         if movie?.notification == nil {
@@ -223,11 +199,11 @@ class MovieDetailViewController: UIViewController {
         scheduleMovie(with: identifier)
         cancelSelectingDate()
     }
-
+    
     @objc private func cancelSelectingDate() {
         view.endEditing(true)
     }
-
+    
     // MARK: Navigation methods
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let destVc = segue.destination as? RegisterEditMovieViewController else {
@@ -235,7 +211,7 @@ class MovieDetailViewController: UIViewController {
         }
         destVc.editingMovie = self.movie
     }
-
+    
     // MARK: IBAction methods
     @IBAction func back(_ sender: Any) {
         self.navigationController?.popViewController(animated: true)
@@ -247,7 +223,7 @@ class MovieDetailViewController: UIViewController {
     
     @IBAction func toggleSchedule(_ sender: UISwitch) {
         if sender.isOn {
-            askNotificationPermission()
+            checkNotificationPermission()
             UIView.animate(withDuration: 0.4) {
                 self.scheduleDateStackView.isHidden = false
             }
@@ -259,16 +235,16 @@ class MovieDetailViewController: UIViewController {
             }
         }
     }
-
+    
     @IBAction func play(_ sender: Any) {
         tryToPlay()
     }
-
+    
 }
 
 // MARK: - Player
 extension MovieDetailViewController {
-
+    
     /// This method should be called from the main thread
     ///
     /// - Parameter url: video url
@@ -299,11 +275,11 @@ extension MovieDetailViewController {
     }
     
     func tryToPlay() {
-
+        
         self.spinner.isHidden = false
         self.spinner.startAnimating()
-
+        
         callTraillerService()
     }
-
+    
 }
