@@ -12,10 +12,11 @@ import CoreData
 class RegisterEditMovieViewController: UIViewController {
     
     var editingMovie: Movie?
-    var selectedCategories = Set<Category>()
+    //var selectedCategories = Set<Category>()
     var pictureChanged = false
     var categoriesDataProvider: CategoriesCoreDataProvider?
-    var categories = [Category]()
+    //var categories = [Category]()
+    let categoriesDataSource = CategoriesDataSource()
     
     lazy var hourPickerView: UIPickerView = {
         let pkv = UIPickerView()
@@ -49,12 +50,13 @@ class RegisterEditMovieViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.scrollView.keyboardDismissMode = .onDrag
-        self.categoriesCollectionView.delegate = self
-        self.categoriesCollectionView.dataSource = self
+        self.categoriesCollectionView.delegate = self.categoriesDataSource
+        self.categoriesCollectionView.dataSource = self.categoriesDataSource
+        self.categoriesDataSource.delegate = self
         
         if editingMovie != nil && editingMovie?.categories != nil {
             if let setCategories = editingMovie!.categories as? Set<Category> {
-                selectedCategories = setCategories
+                self.categoriesDataSource.selectedCategories = setCategories
             }
         }
         categoriesDataProvider = CategoriesCoreDataProvider(delegate: self)
@@ -164,7 +166,8 @@ class RegisterEditMovieViewController: UIViewController {
     private func loadCategories() {
         categoriesDataProvider?.fetch(completion: { [weak self] error, loadedCategories in
             if error == nil {
-                self?.categories = loadedCategories ?? []
+                //self?.categories = loadedCategories ?? []
+                self?.categoriesDataSource.categories = loadedCategories ?? []
                 DispatchQueue.main.async {
                     self?.categoriesCollectionView.reloadData()
                 }
@@ -236,9 +239,9 @@ class RegisterEditMovieViewController: UIViewController {
             }
         }
         
-       editingMovie?.duration = getFormattedDuration()
+        editingMovie?.duration = getFormattedDuration()
         
-        editingMovie?.categories = selectedCategories as NSSet
+        editingMovie?.categories = self.categoriesDataSource.selectedCategories as NSSet
     }
     
     private func isCameraAvailable() -> Bool {
@@ -287,84 +290,6 @@ class RegisterEditMovieViewController: UIViewController {
     }
 }
 
-extension RegisterEditMovieViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) else {
-            return
-        }
-        if let categoryCell = cell as? MovieCategoryCollectionViewCell {
-            let category = categories[indexPath.row]
-            
-            if selectedCategories.contains(category) {
-                selectedCategories.remove(category)
-                categoryCell.state = .unselected
-            } else {
-                selectedCategories.insert(category)
-                categoryCell.state = .selected
-            }
-        } else {
-            showAddCategoryAlert()
-        }
-    }
-}
-
-extension RegisterEditMovieViewController: UICollectionViewDataSource {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // +1 to show add category cell
-        let counter = categories.count
-        return (counter > 0) ? counter + 1 : 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt idxPath: IndexPath) -> UICollectionViewCell {
-        
-        let counter = categories.count
-        
-        //Last cell of the list
-        if idxPath.row == counter {
-            return collectionView.dequeueReusableCell(withReuseIdentifier: "addCategoryCell", for: idxPath)
-        }
-        
-        let identifier = MovieCategoryCollectionViewCell.cellIdentifier
-        
-        //Regular cell
-        let cll = collectionView.dequeueReusableCell(withReuseIdentifier: identifier, for: idxPath)
-        
-        if let cell = cll as? MovieCategoryCollectionViewCell {
-            let category = categories[idxPath.row]
-            
-            cell.prepareCell(with: category)
-            
-            if selectedCategories.contains(category) {
-                cell.state = .selected
-            } else {
-                cell.state = .unselected
-            }
-            return cell
-        } else {
-            return UICollectionViewCell()
-        }
-    }
-    
-}
-
-extension RegisterEditMovieViewController: UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ clV: UICollectionView, layout clVL: UICollectionViewLayout, sizeForItemAt idxP: IndexPath) -> CGSize {
-        
-        let counter = categories.count
-       
-        if idxP.row < counter {
-            return CGSize(width: 120, height: 40)
-        }
-        //Last cell of the list
-        return CGSize(width: 50, height: 40)
-    }
-}
-
 extension RegisterEditMovieViewController: UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         guard let originalImage = info[.originalImage] as? UIImage else { return }
@@ -408,5 +333,13 @@ extension RegisterEditMovieViewController: UIPickerViewDataSource, UIPickerViewD
 extension RegisterEditMovieViewController: CategoriesCoreDataProviderDelegate {
     func dataDidChange() {
         self.loadCategories()
+    }
+}
+
+extension RegisterEditMovieViewController: CategoriesDataSourceDelegate {
+    func shouldDisplayAddCategoryAlert() {
+        DispatchQueue.main.async { [weak self] in
+            self?.showAddCategoryAlert()
+        }
     }
 }
