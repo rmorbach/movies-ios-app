@@ -14,6 +14,7 @@ class CoreDataUnitTests: XCTestCase {
     typealias MovieCategory = Movies.Category
     
     override func setUp() {
+        deleteMoviesFromCoreData()
         insertMoviesInCoreData()
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -29,7 +30,7 @@ class CoreDataUnitTests: XCTestCase {
         moviesDataProvider.fetch { error, moviesLoaded in
             XCTAssertNil(error)
             XCTAssertNotNil(moviesLoaded)
-            XCTAssertEqual(moviesLoaded?.count, 9)
+            XCTAssertEqual(moviesLoaded?.count, 8)
             expectation.fulfill()
         }
         wait(for: [expectation], timeout: 2)
@@ -43,6 +44,7 @@ class CoreDataUnitTests: XCTestCase {
             for movie in moviesLoaded! {
                 let _ = moviesDataProvider.delete(object: movie)
             }
+            UserDefaults.standard.set(false, forKey: "moviesLoaded")
         }
     
     }

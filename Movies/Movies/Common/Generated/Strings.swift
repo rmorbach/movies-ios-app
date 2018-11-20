@@ -17,7 +17,7 @@ internal enum Localization {
   internal static let cancel = Localization.tr("Localizable", "CANCEL")
   /// Category
   internal static let category = Localization.tr("Localizable", "CATEGORY")
-  /// Delete
+  /// Delete 
   internal static let delete = Localization.tr("Localizable", "DELETE")
   /// Really wants to delete %@?
   internal static func deleteMovieConfirm(_ p1: String) -> String {
