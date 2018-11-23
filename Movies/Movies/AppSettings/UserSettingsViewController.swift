@@ -16,6 +16,10 @@ class UserSettingsViewController: UIViewController {
     @IBOutlet weak var autoPlaySwitch: UISwitch!
     @IBOutlet weak var themColorSegmentedControl: UISegmentedControl!
 
+    override func loadView() {
+        view = SettingsView(delegate: self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -24,18 +28,20 @@ class UserSettingsViewController: UIViewController {
         super.viewWillAppear(animated)
         arrangeStackView()
         let themeColor = userSettings.currentThemeColor()
-
+        guard let currentView = view as? SettingsView else { return }
+        
         switch themeColor {
         case .black:
-            themColorSegmentedControl.selectedSegmentIndex = 0
+            currentView.themeColorSegmentedControl.selectedSegmentIndex = 0
         case .green:
-            themColorSegmentedControl.selectedSegmentIndex = 1
+            currentView.themeColorSegmentedControl.selectedSegmentIndex = 1
         case .orange:
-            themColorSegmentedControl.selectedSegmentIndex = 2
+            currentView.themeColorSegmentedControl.selectedSegmentIndex = 2
         }
-
+        
         let autoPlay = userSettings.autoPlay()
-        autoPlaySwitch.setOn(autoPlay, animated: true)
+        currentView.autoPlaySwitch.setOn(autoPlay, animated: true)
+        
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -52,18 +58,21 @@ class UserSettingsViewController: UIViewController {
             self.themeColorStackView.axis = .vertical
         }
     }
+    
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
        arrangeStackView()
     }
+    
+}
 
-    // MARK: - IBActions
-
-    @IBAction func changeAutoPlay(_ sender: UISwitch) {
-        userSettings.changeAutoPlay(to: sender.isOn)
+extension UserSettingsViewController: SettingsDelegate {
+    
+    func userChangedAutoPlay(to state: Bool) {
+        userSettings.changeAutoPlay(to: state)
     }
-
-    @IBAction func changeThemeColor(_ sender: UISegmentedControl) {
-        switch sender.selectedSegmentIndex {
+    
+    func userChangedThemeColor(to position: Int) {
+        switch position {
         case 0:
             userSettings.changeTheme(with: ThemeColor.black)
         case 1:
@@ -74,4 +83,5 @@ class UserSettingsViewController: UIViewController {
             userSettings.changeTheme(with: ThemeColor.black)
         }
     }
+
 }

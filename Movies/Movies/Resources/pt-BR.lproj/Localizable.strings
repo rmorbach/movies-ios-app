@@ -35,3 +35,10 @@
 "RESOURCE_NOT_FOUND" = "Recurso não encontrado";
 "FAIL_PARSE" = "Falha ao tratar dados";
 "EMPTY_RESPONSE" = "Resposta vazia";
+
+"SETTINGS_MAIN_COLOR" = "Cor principal";
+"SETTINGS_COLOR_GREEN" = "Verde";
+"SETTINGS_COLOR_BLACK" = "Preto";
+"SETTINGS_COLOR_ORANGE" = "Laranja";
+
+"SETTINGS_AUTO_PLAY" = "Auto Play";

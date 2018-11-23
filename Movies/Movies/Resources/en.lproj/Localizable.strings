@@ -35,3 +35,10 @@
 "RESOURCE_NOT_FOUND" = "Resource not found";
 "FAIL_PARSE" = "Fail parsing data";
 "EMPTY_RESPONSE" = "Empty response";
+
+"SETTINGS_MAIN_COLOR" = "Main Color";
+"SETTINGS_COLOR_GREEN" = "Green";
+"SETTINGS_COLOR_BLACK" = "Black";
+"SETTINGS_COLOR_ORANGE" = "Orange";
+
+"SETTINGS_AUTO_PLAY" = "Auto Play";

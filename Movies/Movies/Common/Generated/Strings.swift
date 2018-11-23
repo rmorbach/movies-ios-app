@@ -17,7 +17,7 @@ internal enum Localization {
   internal static let cancel = Localization.tr("Localizable", "CANCEL")
   /// Category
   internal static let category = Localization.tr("Localizable", "CATEGORY")
-  /// Delete 
+  /// Delete
   internal static let delete = Localization.tr("Localizable", "DELETE")
   /// Really wants to delete %@?
   internal static func deleteMovieConfirm(_ p1: String) -> String {
@@ -55,6 +55,16 @@ internal enum Localization {
   internal static let sad = Localization.tr("Localizable", "SAD")
   /// Settings
   internal static let settings = Localization.tr("Localizable", "SETTINGS")
+  /// Auto Play
+  internal static let settingsAutoPlay = Localization.tr("Localizable", "SETTINGS_AUTO_PLAY")
+  /// Black
+  internal static let settingsColorBlack = Localization.tr("Localizable", "SETTINGS_COLOR_BLACK")
+  /// Green
+  internal static let settingsColorGreen = Localization.tr("Localizable", "SETTINGS_COLOR_GREEN")
+  /// Orange
+  internal static let settingsColorOrange = Localization.tr("Localizable", "SETTINGS_COLOR_ORANGE")
+  /// Main Color
+  internal static let settingsMainColor = Localization.tr("Localizable", "SETTINGS_MAIN_COLOR")
 }
 // swiftlint:enable identifier_name line_length type_body_length
 
