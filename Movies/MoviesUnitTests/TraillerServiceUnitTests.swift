@@ -7,6 +7,7 @@
 //
 
 import XCTest
+
 @testable import Movies
 
 class TraillerServiceUnitTests: XCTestCase {
@@ -43,6 +44,22 @@ class TraillerServiceUnitTests: XCTestCase {
             XCTAssertNil(url)
             XCTAssertNotNil(serviceError)
             XCTAssertEqual(serviceError, ServiceError.emptyResponse)
+            expectation.fulfill()
+        }
+        
+        wait(for: [expectation], timeout: 10)
+    }
+    
+    
+    /// In order to make this test pass it is necessary to change apiBaseURL in TraillerService.swift file.
+    func testServiceInvalidUrlShouldFail() {
+        let expectation = XCTestExpectation(description: "Invalid URL expectation")
+        let movieName = "Some random movie"
+        
+        service.trailerUrlFor(movie: movieName) { url, serviceError in
+            XCTAssertNil(url)
+            XCTAssertNotNil(serviceError)
+            XCTAssertEqual(serviceError, ServiceError.invalidUrl)
             expectation.fulfill()
         }
         

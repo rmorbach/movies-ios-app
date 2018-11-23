@@ -42,7 +42,7 @@
         <!--Movies list-->
         <scene sceneID="gse-oU-fdO">
             <objects>
-                <tableViewController id="3r1-Jd-KWZ" customClass="MoviesTableViewController" customModule="Movies" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="MoviesTableViewController" id="3r1-Jd-KWZ" customClass="MoviesTableViewController" customModule="Movies" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="3aC-RF-aLE">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="551"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1200,6 +1200,6 @@
         <image name="tab-settings-75" width="37.5" height="37.5"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="AaX-wh-hOT"/>
+        <segue reference="srt-u0-44w"/>
     </inferredMetricsTieBreakers>
 </document>

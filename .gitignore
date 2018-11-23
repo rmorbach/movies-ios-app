@@ -20,6 +20,8 @@ DerivedData/
 *.xcscmblueprint
 
 Pods/
+ReferenceImages_64/
+
 
 ## Obj-C/Swift specific
 *.hmap

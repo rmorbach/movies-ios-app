@@ -7,4 +7,9 @@ target 'Movies' do
   pod 'SwiftLint'
   pod 'SwiftGen'
   
+  target 'MoviesUnitTests' do
+      # use_frameworks!
+      pod 'iOSSnapshotTestCase'
+  end
+  
 end
