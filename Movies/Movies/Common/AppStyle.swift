@@ -10,7 +10,7 @@ import UIKit
 
 extension UIFont {
     static let title = UIFont.boldSystemFont(ofSize: 28)
-    static let body = UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.light)
+    static let body = UIFont.systemFont(ofSize: 17, weight: UIFont.Weight.light)
 }
 
 enum Color {

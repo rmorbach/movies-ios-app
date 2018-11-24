@@ -11,10 +11,6 @@ import UIKit
 class UserSettingsViewController: UIViewController {
 
     let userSettings = UserSettingsManager.shared
-    // MARK: - IBOutlets
-    @IBOutlet weak var themeColorStackView: UIStackView!
-    @IBOutlet weak var autoPlaySwitch: UISwitch!
-    @IBOutlet weak var themColorSegmentedControl: UISegmentedControl!
 
     override func loadView() {
         view = SettingsView(delegate: self)
@@ -26,7 +22,7 @@ class UserSettingsViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        arrangeStackView()
+        
         let themeColor = userSettings.currentThemeColor()
         guard let currentView = view as? SettingsView else { return }
         
@@ -50,19 +46,6 @@ class UserSettingsViewController: UIViewController {
         appDelegate.applySettings()
     }
 
-    private func arrangeStackView() {
-        if self.themeColorStackView == nil { return }
-        if UIDevice.current.orientation.isLandscape {
-            self.themeColorStackView.axis = .horizontal
-        } else {
-            self.themeColorStackView.axis = .vertical
-        }
-    }
-    
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-       arrangeStackView()
-    }
-    
 }
 
 extension UserSettingsViewController: SettingsDelegate {
