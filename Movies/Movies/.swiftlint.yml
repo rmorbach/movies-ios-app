@@ -1,4 +1,4 @@
 disabled_rules:
   - trailing_whitespace
-
+  - nesting
 line_length: 150

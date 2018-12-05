@@ -11,6 +11,12 @@ import UserNotifications
 import AVFoundation
 import AVKit
 
+protocol MovieDetailDisplayLogic: class {
+    
+    func displayMovie(viewModel: Display.ViewModel)
+    
+}
+
 class MovieDetailViewController: UIViewController {
     
     // MARK: Private properties
@@ -41,6 +47,9 @@ class MovieDetailViewController: UIViewController {
     // MARK: Internals
     var movie: Movie?
     
+    var interactor: MovieDetailBusinessLogic?
+    var router: (MovieDetailRoutingLogic & MovieDetailDataPassing)?
+    
     // MARK: IBOutlets
     @IBOutlet weak var coverImageView: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
@@ -56,6 +65,17 @@ class MovieDetailViewController: UIViewController {
     @IBOutlet weak var scheduleDateStackView: UIStackView!
     
     // MARK: Lifecyle
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setup()
+    }
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        setup()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         datePicker.minimumDate = Date()
@@ -86,33 +106,49 @@ class MovieDetailViewController: UIViewController {
     }
     
     // MARK: - Private methods
+    
+    private func setup() {
+        let viewController = self
+        let interactor = MovieDetailInteractor()
+        let presenter = MovieDetailPresenter()
+        interactor.presenter = presenter
+        presenter.viewController = viewController
+        
+        let router = MovieDetailRouter()
+        viewController.router = router
+        viewController.interactor = interactor
+        router.dataStore = interactor
+    }
+        
     private func buildScreen() {
-        guard let movie = self.movie else { return }
-        
-        if movie.image != nil {
-            self.coverImageView.image = movie.image
-        }
-        
-        self.titleLabel.text = movie.title
-        self.ratingLabel.text = movie.formattedRating
-        self.categoriesLabel.text = movie.formattedCategorie
-        self.durationLabel.text = movie.duration ?? ""
-        
-        if self.summaryLabel != nil {
-            self.summaryLabel.text = movie.summary ?? ""
-        }
-        
-        if self.summaryTextView != nil {
-            self.summaryTextView.text = movie.summary ?? ""
-        }
-        
-        if movie.notification != nil {
-            datePicker.date = movie.notification!.date!
-            scheduleTextField.text = datePicker.date.format
-            self.schedule = true
-        } else {
-            self.schedule = false
-        }
+//        guard let movie = self.movie else { return }
+//
+//        if movie.image != nil {
+//            self.coverImageView.image = movie.image
+//        }
+//
+//        self.titleLabel.text = movie.title
+//        self.ratingLabel.text = movie.formattedRating
+//        self.categoriesLabel.text = movie.formattedCategorie
+//        self.durationLabel.text = movie.duration ?? ""
+//
+//        if self.summaryLabel != nil {
+//            self.summaryLabel.text = movie.summary ?? ""
+//        }
+//
+//        if self.summaryTextView != nil {
+//            self.summaryTextView.text = movie.summary ?? ""
+//        }
+//
+//        if movie.notification != nil {
+//            datePicker.date = movie.notification!.date!
+//            scheduleTextField.text = datePicker.date.format
+//            self.schedule = true
+//        } else {
+//            self.schedule = false
+//        }
+        let request = Display.Request(movie: nil)
+        interactor?.showMovie(request: request)
         
     }
     
@@ -282,4 +318,27 @@ extension MovieDetailViewController {
         callTraillerService()
     }
     
+}
+
+extension MovieDetailViewController: MovieDetailDisplayLogic {
+    func displayMovie(viewModel: Display.ViewModel) {
+        DispatchQueue.main.async { [weak self] in
+            
+            self?.coverImageView.image = viewModel.coverImage
+            self?.titleLabel.text = viewModel.title
+            self?.ratingLabel.text = viewModel.rating
+            self?.categoriesLabel.text = viewModel.categories
+            self?.durationLabel.text = viewModel.duration
+            self?.summaryLabel.text = viewModel.summary
+            self?.summaryTextView.text = viewModel.summary
+            
+            if viewModel.notificationDate != nil {
+                self?.datePicker.date = viewModel.notificationDate!
+                self?.scheduleTextField.text = viewModel.notificationText!
+                self?.schedule = true
+            } else {
+                self?.schedule = false
+            }
+        }
+    }
 }

@@ -9,13 +9,21 @@
 import UIKit
 import CoreData
 
+protocol MoviesListDisplayLogic: class {
+    
+    func displayMovies(viewModel: Fetch.ViewModel)
+    func displayDeleted(viewModel: Delete.ViewModel)
+    
+}
+
 class MoviesTableViewController: UITableViewController {
     
     var selectedMovie: Movie?
     
-    var moviesDataProvider: MoviesCoreDataProvider?
-    
     var movies = [Movie]()
+    
+    var interactor: (MoviesListBusinessLogic & MoviesCoreDataProviderDelegate & MoviesListDataStore)?
+    var router: MoviesListRoutingLogic?
     
     @IBOutlet var emptyDataView: UIView!
     
@@ -23,7 +31,6 @@ class MoviesTableViewController: UITableViewController {
         super.viewDidLoad()
         self.navigationController?.interactivePopGestureRecognizer?.delegate = self
         //self.navigationController?.navigationBar.barTintColor = UIColor.blue
-        moviesDataProvider = MoviesCoreDataProvider(with: self)
         loadMovies()
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -31,20 +38,39 @@ class MoviesTableViewController: UITableViewController {
         self.tableView.backgroundColor = UIViewController.themeColor
     }
     
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        setup()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setup()
+    }
+    
+    // MARK: - Clean Setup
+    
+    private func setup() {
+        
+        let interactor = MoviesListInteractor()
+        let moviesDataProvider = MoviesCoreDataProvider(with: interactor)
+        let viewController = self
+        viewController.interactor = interactor
+        interactor.moviesWorker = moviesDataProvider
+        
+        let router = MoviesListRouter()
+        viewController.router = router
+        
+        let presenter = MoviesListPresenter()
+        presenter.viewController = self
+        
+        interactor.presenter = presenter
+        router.dataStore = interactor
+    }
+    
     // MARK: - Private methods
     private func loadMovies() {
-        
-        moviesDataProvider?.fetch { [weak self] error, loadedMovies in
-            if error == nil {
-                self?.movies = loadedMovies ?? []
-                DispatchQueue.main.async {
-                    self?.tableView.reloadData()
-                }
-            } else {
-                debugPrint("Error fetching movies")
-            }
-        }
-    
+        interactor?.fetchMovies(request: nil)
     }
     
     private func confirmDelete(at indexPath: IndexPath) {
@@ -54,7 +80,8 @@ class MoviesTableViewController: UITableViewController {
         let confirmActionSheet = UIAlertController(title: title, message: nil, preferredStyle: .actionSheet)
         
         let deleteAction = UIAlertAction(title: Localization.delete, style: .destructive) {[weak self] action in
-            _ = self?.moviesDataProvider?.delete(object: movie)
+            let deleteRequest = Delete.Request(movie: movie)
+            self?.interactor?.deleteMovie(request: deleteRequest)
         }
         let dismissAction = UIAlertAction(title: Localization.cancel, style: .default) { action in
             self.dismiss(animated: true, completion: nil)
@@ -67,9 +94,27 @@ class MoviesTableViewController: UITableViewController {
     
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let destVc = segue.destination as? MovieDetailViewController {
-            destVc.movie = self.selectedMovie
+        
+        if segue.identifier == "movieDetailSegue" {
+            router?.routeToMovieDetails(with: segue)
+            if let destVc = segue.destination as? MovieDetailViewController {
+                destVc.movie = self.selectedMovie
+            }
         }
+    }
+}
+
+extension MoviesTableViewController: MoviesListDisplayLogic {
+    
+    func displayMovies(viewModel: Fetch.ViewModel) {
+        self.movies = viewModel.movies ?? [Movie]()
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+    }
+    
+    func displayDeleted(viewModel: Delete.ViewModel) {
+        
     }
     
 }
@@ -130,12 +175,8 @@ extension MoviesTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let movie = movies[indexPath.row]
         self.selectedMovie = movie
+        let request = ShowDetails.Request(movie: movie)
+        interactor?.showMovieDetails(request: request)
         self.performSegue(withIdentifier: "movieDetailSegue", sender: nil)
-    }
-}
-
-extension MoviesTableViewController: MoviesCoreDataProviderDelegate {
-    func dataDidChange() {
-        self.loadMovies()
     }
 }

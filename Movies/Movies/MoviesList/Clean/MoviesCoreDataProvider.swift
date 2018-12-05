@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-protocol MoviesCoreDataProviderDelegate: NSObjectProtocol {
+protocol MoviesCoreDataProviderDelegate: class {
     func dataDidChange()
 }
 
