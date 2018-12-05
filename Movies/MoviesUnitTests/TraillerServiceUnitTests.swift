@@ -10,9 +10,9 @@ import XCTest
 
 @testable import Movies
 
-class TraillerServiceUnitTests: XCTestCase {
+class TrailerServiceUnitTests: XCTestCase {
 
-    let service = TraillerService()
+    let service = TrailerService()
     
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.

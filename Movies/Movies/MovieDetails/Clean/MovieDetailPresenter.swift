@@ -10,11 +10,27 @@ import Foundation
 import UIKit
 protocol MovieDetailPresentationLogic {
     func presentMovie(response: Display.Response)
+    func prepareVideoToPlay(response: VideoPlay.Response)
+    func prepareScheduleMovie(response: PrepareSchedule.Response)
+    func presentSchedule(response: Schedule.Response)
+    func presentSettings(response: Settings.Response)
+    func presentCancelSchedule(response: CancelSchedule.Response)
 }
 
 class MovieDetailPresenter: MovieDetailPresentationLogic {
     
     weak var viewController: MovieDetailDisplayLogic?
+    
+    // MARK: - MovieDetailPresentationLogic methods
+    
+    func prepareVideoToPlay(response: VideoPlay.Response) {
+        var videoUrl: URL?
+        if response.trailerUrl != nil {
+            videoUrl = URL(string: response.trailerUrl!)
+        }
+        let viewModel = VideoPlay.ViewModel(success: response.success, trailerUrl: videoUrl, errorMessage: response.errorMessage)
+        viewController?.playMovieTrailer(viewModel: viewModel)
+    }
     
     func presentMovie(response: Display.Response) {
         
@@ -42,6 +58,32 @@ class MovieDetailPresenter: MovieDetailPresentationLogic {
         
         self.viewController?.displayMovie(viewModel: viewModel)
         
+    }
+    
+    func prepareScheduleMovie(response: PrepareSchedule.Response) {
+        let viewModel = PrepareSchedule.ViewModel(error: response.error, state: response.state)
+        viewController?.displayMovieSchedule(viewModel: viewModel)
+    }
+    
+    func presentSchedule(response: Schedule.Response) {
+        let viewModel = Schedule.ViewModel(success: response.success)
+        viewController?.displaySchedule(viewModel: viewModel)
+    }
+    
+    func presentSettings(response: Settings.Response) {
+        guard let url = URL(string: response.url) else { return }
+        let viewModel = Settings.ViewModel(url: url)
+        viewController?.displaySettings(viewModel: viewModel)        
+    }
+ 
+    func presentCancelSchedule(response: CancelSchedule.Response) {
+        let title = Localization.sad
+        let alertMessage = Localization.notificationDenied
+        let actionOpenSettings = Localization.settings
+        let actionCancel = Localization.cancel
+        let viewModel = CancelSchedule.ViewModel(alertTitle: title, alertMessage: alertMessage, actionOpenSettings: actionOpenSettings, actionCancel: actionCancel)
+        viewController?.displayCancelSchedule(viewModel: viewModel)
+     
     }
     
 }

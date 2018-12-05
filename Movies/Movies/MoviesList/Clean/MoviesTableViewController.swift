@@ -96,10 +96,7 @@ class MoviesTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if segue.identifier == "movieDetailSegue" {
-            router?.routeToMovieDetails(with: segue)
-            if let destVc = segue.destination as? MovieDetailViewController {
-                destVc.movie = self.selectedMovie
-            }
+            router?.routeToMovieDetails(with: segue)            
         }
     }
 }

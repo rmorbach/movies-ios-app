@@ -38,3 +38,87 @@ struct Display {
         
     }
 }
+
+struct VideoPlay {
+    struct Request {
+        let movieTitle: String
+    }
+    
+    struct Response {
+        let success: Bool
+        let trailerUrl: String?
+        let errorMessage: String?
+    }
+    
+    struct ViewModel {
+        let success: Bool
+        let trailerUrl: URL?
+        let errorMessage: String?
+    }
+}
+
+struct PrepareSchedule {
+    
+    enum ScheduleError {
+        case permissionDenied
+    }
+    
+    enum ScheduleState {
+        case cancel, schedule
+    }
+    
+    struct Request {
+        let state: ScheduleState
+    }
+    
+    struct Response {
+        let error: ScheduleError?
+        let state: ScheduleState
+    }
+    
+    struct ViewModel {
+        let error: ScheduleError?
+        let state: ScheduleState
+    }
+}
+
+struct Schedule {
+    struct Request {
+        let date: Date
+    }
+    
+    struct Response {
+        let success: Bool
+    }
+    
+    struct ViewModel {
+        let success: Bool
+    }
+}
+
+struct Settings {
+    struct Request { }
+    
+    struct Response {
+        let url: String
+    }
+    
+    struct ViewModel {
+        let url: URL
+    }
+}
+
+struct CancelSchedule {
+    struct Request { }
+    
+    struct Response {
+        
+    }
+    
+    struct ViewModel {
+        let alertTitle: String
+        let alertMessage: String
+        let actionOpenSettings: String
+        let actionCancel: String        
+    }
+}

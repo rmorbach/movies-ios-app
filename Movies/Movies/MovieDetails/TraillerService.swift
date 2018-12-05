@@ -16,7 +16,7 @@ enum ServiceError: String, Error {
     case emptyResponse = "Resposta vazia"
 }
 
-class TraillerService {
+class TrailerService {
     
     let apiBaseUrl = "https://itunes.apple.com/search?media=movie&entity=movie&term="
     

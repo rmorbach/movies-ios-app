@@ -12,9 +12,12 @@ import AVFoundation
 import AVKit
 
 protocol MovieDetailDisplayLogic: class {
-    
     func displayMovie(viewModel: Display.ViewModel)
-    
+    func playMovieTrailer(viewModel: VideoPlay.ViewModel)
+    func displayMovieSchedule(viewModel: PrepareSchedule.ViewModel)
+    func displaySchedule(viewModel: Schedule.ViewModel)
+    func displaySettings(viewModel: Settings.ViewModel)
+    func displayCancelSchedule(viewModel: CancelSchedule.ViewModel)
 }
 
 class MovieDetailViewController: UIViewController {
@@ -44,10 +47,7 @@ class MovieDetailViewController: UIViewController {
         }
     }
     
-    // MARK: Internals
-    var movie: Movie?
-    
-    var interactor: MovieDetailBusinessLogic?
+    var interactor: (MovieDetailBusinessLogic & MovieDetailDataStore)?
     var router: (MovieDetailRoutingLogic & MovieDetailDataPassing)?
     
     // MARK: IBOutlets
@@ -119,37 +119,10 @@ class MovieDetailViewController: UIViewController {
         viewController.interactor = interactor
         router.dataStore = interactor
     }
-        
+    
     private func buildScreen() {
-//        guard let movie = self.movie else { return }
-//
-//        if movie.image != nil {
-//            self.coverImageView.image = movie.image
-//        }
-//
-//        self.titleLabel.text = movie.title
-//        self.ratingLabel.text = movie.formattedRating
-//        self.categoriesLabel.text = movie.formattedCategorie
-//        self.durationLabel.text = movie.duration ?? ""
-//
-//        if self.summaryLabel != nil {
-//            self.summaryLabel.text = movie.summary ?? ""
-//        }
-//
-//        if self.summaryTextView != nil {
-//            self.summaryTextView.text = movie.summary ?? ""
-//        }
-//
-//        if movie.notification != nil {
-//            datePicker.date = movie.notification!.date!
-//            scheduleTextField.text = datePicker.date.format
-//            self.schedule = true
-//        } else {
-//            self.schedule = false
-//        }
         let request = Display.Request(movie: nil)
         interactor?.showMovie(request: request)
-        
     }
     
     private func prepareTextField() {
@@ -172,14 +145,6 @@ class MovieDetailViewController: UIViewController {
         self.scheduleTextField.inputAccessoryView = toolbar
     }
     
-    private func scheduleMovie(with identifier: String) {
-        
-        let title = Localization.notificationTitle
-        let body = Localization.notificationMessage(movie!.title!)
-        let date = datePicker.date
-        NotificationManager.shared.scheduleNotificationTriggerDate(identifier: identifier, title: title, body: body, triggerDate: date)
-    }
-    
     private func checkNotificationPermission() {
         
         NotificationManager.shared.userHasGrantedPermission(completion: { [weak self] authorized in
@@ -199,41 +164,24 @@ class MovieDetailViewController: UIViewController {
     }
     
     private func removePendingNotification() {
-        guard let pendingIdentifer = movie?.notification?.id else {
+        guard let pendingIdentifer = interactor?.movie?.notification?.id else {
             return
         }
-        movie!.notification = nil
+        interactor?.movie!.notification = nil
         saveContext()
         NotificationManager.shared.removeNotification(identifiers: [pendingIdentifer])
     }
     
     private func cancelSchedule() {
         self.schedule = false
-        let message = Localization.notificationDenied
-        let alert = UIAlertController(title: Localization.sad, message: message, preferredStyle: .alert)
-        let openSettingsAction = UIAlertAction(title: Localization.settings, style: .default) { action in
-            guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-        }
-        let cancelAction = UIAlertAction(title: Localization.cancel, style: .cancel) {[weak self] action in
-            self?.dismiss(animated: true, completion: nil)
-        }
-        alert.addAction(openSettingsAction)
-        alert.addAction(cancelAction)
-        present(alert, animated: true, completion: nil)
+        let request = CancelSchedule.Request()
+        interactor?.cancelSchedule(request: request)
     }
     
     @objc private func doneSelectingDate() {
         scheduleTextField.text = datePicker.date.format
-        if movie?.notification == nil {
-            movie?.notification = Notification(context: context)
-        }
-        movie?.notification!.date = datePicker.date
-        let identifier = String(Date().timeIntervalSince1970)
-        movie?.notification!.id = identifier
-        saveContext()
-        scheduleMovie(with: identifier)
-        cancelSelectingDate()
+        let request = Schedule.Request(date: datePicker.date)
+        interactor?.scheduleMovie(request: request)
     }
     
     @objc private func cancelSelectingDate() {
@@ -245,7 +193,7 @@ class MovieDetailViewController: UIViewController {
         guard let destVc = segue.destination as? RegisterEditMovieViewController else {
             return
         }
-        destVc.editingMovie = self.movie
+        destVc.editingMovie = interactor?.movie
     }
     
     // MARK: IBAction methods
@@ -259,10 +207,8 @@ class MovieDetailViewController: UIViewController {
     
     @IBAction func toggleSchedule(_ sender: UISwitch) {
         if sender.isOn {
-            checkNotificationPermission()
-            UIView.animate(withDuration: 0.4) {
-                self.scheduleDateStackView.isHidden = false
-            }
+            let request = PrepareSchedule.Request(state: .schedule)
+            interactor?.prepareToScheduleMovie(request: request)
         } else {
             self.scheduleTextField.text = ""
             self.removePendingNotification()
@@ -294,20 +240,9 @@ extension MovieDetailViewController {
         present(playerVc, animated: true, completion: nil)
     }
     
-    func callTraillerService() {
-        let service = TraillerService()
-        service.trailerUrlFor(movie: self.movie!.title!) {[weak self] previewUrlString, error in
-            DispatchQueue.main.async {
-                self?.spinner.stopAnimating()
-                self?.spinner.isHidden = true
-                if error != nil {
-                    self?.showAlert(with: Localization.error, message: error!.rawValue)
-                    return
-                }
-                guard let url = URL(string: previewUrlString ?? "") else { return }
-                self?.playVideo(for: url)
-            }
-        }
+    func callTrailerService() {
+        let request = VideoPlay.Request(movieTitle: interactor!.movie!.title!)
+        interactor?.playMovieTrailer(request: request)
     }
     
     func tryToPlay() {
@@ -315,7 +250,7 @@ extension MovieDetailViewController {
         self.spinner.isHidden = false
         self.spinner.startAnimating()
         
-        callTraillerService()
+        callTrailerService()
     }
     
 }
@@ -341,4 +276,63 @@ extension MovieDetailViewController: MovieDetailDisplayLogic {
             }
         }
     }
+    
+    func playMovieTrailer(viewModel: VideoPlay.ViewModel) {
+        
+        DispatchQueue.main.async { [weak self] in
+            self?.spinner.stopAnimating()
+            self?.spinner.isHidden = true
+            
+            if viewModel.success && viewModel.trailerUrl != nil {
+                self?.playVideo(for: viewModel.trailerUrl!)
+            } else {
+                self?.showAlert(with: Localization.error, message: viewModel.errorMessage ?? Localization.error)
+            }
+        }
+    }
+    
+    func displayMovieSchedule(viewModel: PrepareSchedule.ViewModel) {
+        DispatchQueue.main.async { [weak self] in
+            if viewModel.error != nil {
+                self?.cancelSchedule()
+            } else {
+                UIView.animate(withDuration: 0.4) {
+                    self?.scheduleDateStackView.isHidden = false
+                }
+            }
+        }
+    }
+    
+    func displaySchedule(viewModel: Schedule.ViewModel) {
+        //
+        DispatchQueue.main.async { [weak self] in
+            self?.cancelSelectingDate()
+        }
+    }
+    
+    func displaySettings(viewModel: Settings.ViewModel) {
+        DispatchQueue.main.async {
+            UIApplication.shared.open(viewModel.url, options: [:], completionHandler: nil)
+        }
+    }
+    
+    func displayCancelSchedule(viewModel: CancelSchedule.ViewModel) {
+        DispatchQueue.main.async { [weak self] in
+            let message = viewModel.alertMessage
+            let alert = UIAlertController(title: viewModel.alertTitle, message: message, preferredStyle: .alert)
+            
+            let openSettingsAction = UIAlertAction(title: viewModel.actionOpenSettings, style: .default) { action in
+                let request = Settings.Request()
+                self?.interactor?.openSettings(request: request)
+            }
+            
+            let cancelAction = UIAlertAction(title: viewModel.actionCancel, style: .cancel) {[weak self] action in
+                self?.dismiss(animated: true, completion: nil)
+            }
+            alert.addAction(openSettingsAction)
+            alert.addAction(cancelAction)
+            self?.present(alert, animated: true, completion: nil)
+        }
+    }
+    
 }
