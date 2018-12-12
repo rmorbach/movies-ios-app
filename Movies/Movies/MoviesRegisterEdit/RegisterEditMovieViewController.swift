@@ -9,6 +9,10 @@
 import UIKit
 import CoreData
 
+protocol RegisterEditDisplayLogic: class {
+    func displayCategories(viewModel: LoadCategories.ViewModel)
+}
+
 class RegisterEditMovieViewController: UIViewController {
     
     var editingMovie: Movie?
@@ -17,6 +21,8 @@ class RegisterEditMovieViewController: UIViewController {
     var categoriesDataProvider: CategoriesCoreDataProvider?
     //var categories = [Category]()
     let categoriesDataSource = CategoriesDataSource()
+    
+    var interactor: (RegisterEditBusinessLogic)?
     
     lazy var hourPickerView: UIPickerView = {
         let pkv = UIPickerView()
@@ -86,7 +92,29 @@ class RegisterEditMovieViewController: UIViewController {
         self.removerObservers()
     }
     
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setup()
+    }
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        setup()
+    }
+    
     // MARK: - Private methods
+    
+    private func setup() {
+        let viewController = self
+        let interactor = RegisterEditInteractor()
+        let presenter = RegisterEditPresenter()
+        presenter.viewController = self
+        interactor.presenter = presenter
+        viewController.interactor = interactor
+        let categoriesDataProvider = CategoriesCoreDataProvider(delegate: interactor)
+        interactor.worker = categoriesDataProvider
+        
+    }
     
     private func prepareTextFields() {
         let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 45))
@@ -164,15 +192,7 @@ class RegisterEditMovieViewController: UIViewController {
     }
     
     private func loadCategories() {
-        categoriesDataProvider?.fetch(completion: { [weak self] error, loadedCategories in
-            if error == nil {
-                //self?.categories = loadedCategories ?? []
-                self?.categoriesDataSource.categories = loadedCategories ?? []
-                DispatchQueue.main.async {
-                    self?.categoriesCollectionView.reloadData()
-                }
-            }
-        })
+        self.interactor?.loadCategories(request: nil)
     }
     
     private func saveCategory(named: String) {
@@ -340,6 +360,15 @@ extension RegisterEditMovieViewController: CategoriesDataSourceDelegate {
     func shouldDisplayAddCategoryAlert() {
         DispatchQueue.main.async { [weak self] in
             self?.showAddCategoryAlert()
+        }
+    }
+}
+
+extension RegisterEditMovieViewController: RegisterEditDisplayLogic {
+    func displayCategories(viewModel: LoadCategories.ViewModel) {
+        DispatchQueue.main.async { [weak self] in
+            self?.categoriesDataSource.categories = viewModel.categories ?? []
+            self?.categoriesCollectionView.reloadData()
         }
     }
 }

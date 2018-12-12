@@ -104,9 +104,14 @@ class MoviesTableViewController: UITableViewController {
 extension MoviesTableViewController: MoviesListDisplayLogic {
     
     func displayMovies(viewModel: Fetch.ViewModel) {
-        self.movies = viewModel.movies ?? [Movie]()
         DispatchQueue.main.async {
-            self.tableView.reloadData()
+            switch viewModel {
+            case .success(let movies):
+                self.movies = movies
+                self.tableView.reloadData()
+            case .error:
+                self.movies = [Movie]()
+            }
         }
     }
     

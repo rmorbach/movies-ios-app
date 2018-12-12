@@ -18,8 +18,14 @@ class MoviesListPresenter: MoviesListPresentationLogic {
     weak var viewController: MoviesListDisplayLogic?
     
     func present(response: Fetch.Response) {
-        let viewModel = Fetch.ViewModel(movies: response.movies)
-        viewController?.displayMovies(viewModel: viewModel)
+        if response.movies != nil {
+            let viewModel = Fetch.ViewModel.success(response.movies!)
+            viewController?.displayMovies(viewModel: viewModel)
+        } else {
+            let viewModel = Fetch.ViewModel.error
+            viewController?.displayMovies(viewModel: viewModel)
+        }
+        
     }
     
     func presentDeleted(response: Delete.Response) {

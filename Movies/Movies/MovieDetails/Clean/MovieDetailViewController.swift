@@ -18,6 +18,7 @@ protocol MovieDetailDisplayLogic: class {
     func displaySchedule(viewModel: Schedule.ViewModel)
     func displaySettings(viewModel: Settings.ViewModel)
     func displayCancelSchedule(viewModel: CancelSchedule.ViewModel)
+    func displayRemovedNotificationSchedule(viewModel: RemovePendingNotification.ViewModel)
 }
 
 class MovieDetailViewController: UIViewController {
@@ -145,31 +146,9 @@ class MovieDetailViewController: UIViewController {
         self.scheduleTextField.inputAccessoryView = toolbar
     }
     
-    private func checkNotificationPermission() {
-        
-        NotificationManager.shared.userHasGrantedPermission(completion: { [weak self] authorized in
-            if !authorized {
-                self?.cancelSchedule()
-            }
-        })
-        
-        NotificationManager.shared.requestAuthorization { [weak self] success in
-            if !success {
-                DispatchQueue.main.async {
-                    self?.cancelSchedule()
-                }
-            }
-        }
-        
-    }
-    
     private func removePendingNotification() {
-        guard let pendingIdentifer = interactor?.movie?.notification?.id else {
-            return
-        }
-        interactor?.movie!.notification = nil
-        saveContext()
-        NotificationManager.shared.removeNotification(identifiers: [pendingIdentifer])
+      let request = RemovePendingNotification.Request()
+      interactor?.removePendingNotification(request: request)
     }
     
     private func cancelSchedule() {
@@ -246,10 +225,8 @@ extension MovieDetailViewController {
     }
     
     func tryToPlay() {
-        
         self.spinner.isHidden = false
         self.spinner.startAnimating()
-        
         callTrailerService()
     }
     
@@ -282,20 +259,21 @@ extension MovieDetailViewController: MovieDetailDisplayLogic {
         DispatchQueue.main.async { [weak self] in
             self?.spinner.stopAnimating()
             self?.spinner.isHidden = true
-            
-            if viewModel.success && viewModel.trailerUrl != nil {
-                self?.playVideo(for: viewModel.trailerUrl!)
-            } else {
-                self?.showAlert(with: Localization.error, message: viewModel.errorMessage ?? Localization.error)
+            switch viewModel {
+            case .success(let trailerUrl):
+                self?.playVideo(for: trailerUrl)
+            case .error(let message):
+                self?.showAlert(with: Localization.error, message: message)
             }
         }
     }
     
     func displayMovieSchedule(viewModel: PrepareSchedule.ViewModel) {
         DispatchQueue.main.async { [weak self] in
-            if viewModel.error != nil {
+            switch viewModel {
+            case .error:
                 self?.cancelSchedule()
-            } else {
+            case .success:
                 UIView.animate(withDuration: 0.4) {
                     self?.scheduleDateStackView.isHidden = false
                 }
@@ -306,17 +284,25 @@ extension MovieDetailViewController: MovieDetailDisplayLogic {
     func displaySchedule(viewModel: Schedule.ViewModel) {
         //
         DispatchQueue.main.async { [weak self] in
-            self?.cancelSelectingDate()
+            switch viewModel {
+            case .success:
+                self?.cancelSelectingDate()
+            default: break
+            }
         }
     }
     
     func displaySettings(viewModel: Settings.ViewModel) {
         DispatchQueue.main.async {
-            UIApplication.shared.open(viewModel.url, options: [:], completionHandler: nil)
+            switch viewModel {
+            case .success(let settingsUrl):
+                UIApplication.shared.open(settingsUrl, options: [:], completionHandler: nil)            
+            }
         }
     }
     
     func displayCancelSchedule(viewModel: CancelSchedule.ViewModel) {
+        
         DispatchQueue.main.async { [weak self] in
             let message = viewModel.alertMessage
             let alert = UIAlertController(title: viewModel.alertTitle, message: message, preferredStyle: .alert)
@@ -333,6 +319,10 @@ extension MovieDetailViewController: MovieDetailDisplayLogic {
             alert.addAction(cancelAction)
             self?.present(alert, animated: true, completion: nil)
         }
+    }
+    
+    func displayRemovedNotificationSchedule(viewModel: RemovePendingNotification.ViewModel) {
+        // Nothing todo here
     }
     
 }

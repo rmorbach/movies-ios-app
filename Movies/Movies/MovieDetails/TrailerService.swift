@@ -20,6 +20,12 @@ class TrailerService {
     
     let apiBaseUrl = "https://itunes.apple.com/search?media=movie&entity=movie&term="
     
+    let service: ServiceAPI
+    
+    init(service: ServiceAPI) {
+        self.service = service
+    }
+    
     func trailerUrlFor(movie title: String, completion: @escaping (_ url: String?, _ error: ServiceError?) -> Void) {
         let urlString = apiBaseUrl + title
         let fragmentedUrlCharacterSet = CharacterSet.urlFragmentAllowed
@@ -33,12 +39,14 @@ class TrailerService {
             return
         }
         
-        Network.post(url: movieUrl, contentType: nil, accept: "text/plain", payload: nil) { data, response, error in
+        let method = HTTPMethod.post
+        
+        service.request(to: movieUrl, method: method, contentType: nil, accept: "text/plain", payload: nil) { data, response, error in
             if error != nil {
                 completion(nil, ServiceError.unknown)
                 return
             }
-
+            
             guard let resp = response else {
                 completion(nil, ServiceError.unknown)
                 return
@@ -58,7 +66,7 @@ class TrailerService {
                             return
                         }
                         
-                        completion(itunesResponse.results.first!.previewUrl, nil)                        
+                        completion(itunesResponse.results.first!.previewUrl, nil)
                         
                     } catch {
                         completion(nil, ServiceError.parseError)
@@ -76,9 +84,9 @@ class TrailerService {
                 completion(nil, ServiceError.unknown)
                 return
             }
-
+            
         }
-
+        
     }
     
 }

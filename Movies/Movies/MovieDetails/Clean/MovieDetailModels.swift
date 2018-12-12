@@ -50,10 +50,9 @@ struct VideoPlay {
         let errorMessage: String?
     }
     
-    struct ViewModel {
-        let success: Bool
-        let trailerUrl: URL?
-        let errorMessage: String?
+    enum ViewModel {
+        case success(URL)
+        case error(String)
     }
 }
 
@@ -76,9 +75,9 @@ struct PrepareSchedule {
         let state: ScheduleState
     }
     
-    struct ViewModel {
-        let error: ScheduleError?
-        let state: ScheduleState
+    enum ViewModel {
+        case error(ScheduleError)
+        case success(ScheduleState)        
     }
 }
 
@@ -91,8 +90,8 @@ struct Schedule {
         let success: Bool
     }
     
-    struct ViewModel {
-        let success: Bool
+    enum ViewModel {
+        case success, error
     }
 }
 
@@ -103,17 +102,15 @@ struct Settings {
         let url: String
     }
     
-    struct ViewModel {
-        let url: URL
+    enum ViewModel {
+        case success(URL)
     }
 }
 
 struct CancelSchedule {
     struct Request { }
     
-    struct Response {
-        
-    }
+    struct Response { }
     
     struct ViewModel {
         let alertTitle: String
@@ -121,4 +118,13 @@ struct CancelSchedule {
         let actionOpenSettings: String
         let actionCancel: String        
     }
+}
+
+struct RemovePendingNotification {
+    struct Request { }
+    
+    struct Response { }
+    
+    struct ViewModel { }
+
 }

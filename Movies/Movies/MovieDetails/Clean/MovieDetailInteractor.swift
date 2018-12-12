@@ -20,6 +20,7 @@ protocol MovieDetailBusinessLogic {
     func scheduleMovie(request: Schedule.Request)
     func openSettings(request: Settings.Request)
     func cancelSchedule(request: CancelSchedule.Request)
+    func removePendingNotification(request: RemovePendingNotification.Request)
 }
 
 class MovieDetailInteractor: MovieDetailBusinessLogic, MovieDetailDataStore {
@@ -28,8 +29,8 @@ class MovieDetailInteractor: MovieDetailBusinessLogic, MovieDetailDataStore {
     
     // MARK: - Private methods
     private func checkNotificationPermission(completion: @escaping (_ success: Bool) -> Void) {        NotificationManager.shared.userHasGrantedPermission(completion: { authorized in
-           completion(authorized)
-        })
+        completion(authorized)
+    })
         
         NotificationManager.shared.requestAuthorization { success in
             completion(success)
@@ -52,7 +53,8 @@ class MovieDetailInteractor: MovieDetailBusinessLogic, MovieDetailDataStore {
     }
     
     func playMovieTrailer(request: VideoPlay.Request) {
-        let service = TrailerService()
+        let api: ServiceAPI = Network()
+        let service = TrailerService(service: api)
         service.trailerUrlFor(movie: request.movieTitle) {[weak self] previewUrlString, error in
             let success: Bool = error != nil ? false: true
             let response = VideoPlay.Response(success: success, trailerUrl: previewUrlString, errorMessage: error?.rawValue ?? "")
@@ -104,4 +106,19 @@ class MovieDetailInteractor: MovieDetailBusinessLogic, MovieDetailDataStore {
         let response = CancelSchedule.Response()
         presenter?.presentCancelSchedule(response: response)
     }
+    
+    func removePendingNotification(request: RemovePendingNotification.Request) {
+        guard let pendingIdentifer = self.movie?.notification?.id else {
+            return
+        }
+        self.movie!.notification = nil
+        let coreDataManager = CoreDataManager.shared
+        try? coreDataManager.context.save()
+    NotificationManager.shared.removeNotification(identifiers: [pendingIdentifer])
+        
+        let response = RemovePendingNotification.Response()
+        presenter?.presentCancelNotificationSchedule(response: response)
+        
+    }
+    
 }

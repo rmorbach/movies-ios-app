@@ -12,8 +12,7 @@ protocol MovieDetailRoutingLogic {
     
 }
 
-protocol MovieDetailDataPassing
-{
+protocol MovieDetailDataPassing {
     var dataStore: MovieDetailDataStore? { get }
 }
 

@@ -16,8 +16,9 @@ struct Fetch {
         let movies: [Movie]?
     }
     
-    struct ViewModel {
-        let movies: [Movie]?
+    enum ViewModel {
+        case success([Movie])
+        case error
     }
 }
 
@@ -40,12 +41,8 @@ struct ShowDetails {
         let movie: Movie
     }
     
-    struct Response {
-        
-    }
+    struct Response { }
     
-    struct ViewModel {
-        
-    }
+    struct ViewModel { }
     
 }

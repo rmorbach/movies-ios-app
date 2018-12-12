@@ -15,6 +15,7 @@ protocol MovieDetailPresentationLogic {
     func presentSchedule(response: Schedule.Response)
     func presentSettings(response: Settings.Response)
     func presentCancelSchedule(response: CancelSchedule.Response)
+    func presentCancelNotificationSchedule(response: RemovePendingNotification.Response)
 }
 
 class MovieDetailPresenter: MovieDetailPresentationLogic {
@@ -28,8 +29,15 @@ class MovieDetailPresenter: MovieDetailPresentationLogic {
         if response.trailerUrl != nil {
             videoUrl = URL(string: response.trailerUrl!)
         }
-        let viewModel = VideoPlay.ViewModel(success: response.success, trailerUrl: videoUrl, errorMessage: response.errorMessage)
-        viewController?.playMovieTrailer(viewModel: viewModel)
+        
+        if response.success {
+            let viewModel = VideoPlay.ViewModel.success(videoUrl!)
+            viewController?.playMovieTrailer(viewModel: viewModel)
+        } else {
+            let viewModel = VideoPlay.ViewModel.error(response.errorMessage ?? "Fail")
+            viewController?.playMovieTrailer(viewModel: viewModel)
+        }
+        
     }
     
     func presentMovie(response: Display.Response) {
@@ -61,21 +69,26 @@ class MovieDetailPresenter: MovieDetailPresentationLogic {
     }
     
     func prepareScheduleMovie(response: PrepareSchedule.Response) {
-        let viewModel = PrepareSchedule.ViewModel(error: response.error, state: response.state)
-        viewController?.displayMovieSchedule(viewModel: viewModel)
+        if response.error != nil {
+            let viewModel = PrepareSchedule.ViewModel.error(response.error!)
+            viewController?.displayMovieSchedule(viewModel: viewModel)
+        } else {
+            let viewModel = PrepareSchedule.ViewModel.success(response.state)
+            viewController?.displayMovieSchedule(viewModel: viewModel)
+        }
     }
     
     func presentSchedule(response: Schedule.Response) {
-        let viewModel = Schedule.ViewModel(success: response.success)
+        let viewModel = (response.success) ? Schedule.ViewModel.success : Schedule.ViewModel.error
         viewController?.displaySchedule(viewModel: viewModel)
     }
     
     func presentSettings(response: Settings.Response) {
         guard let url = URL(string: response.url) else { return }
-        let viewModel = Settings.ViewModel(url: url)
+        let viewModel = Settings.ViewModel.success(url)
         viewController?.displaySettings(viewModel: viewModel)        
     }
- 
+    
     func presentCancelSchedule(response: CancelSchedule.Response) {
         let title = Localization.sad
         let alertMessage = Localization.notificationDenied
@@ -83,7 +96,10 @@ class MovieDetailPresenter: MovieDetailPresentationLogic {
         let actionCancel = Localization.cancel
         let viewModel = CancelSchedule.ViewModel(alertTitle: title, alertMessage: alertMessage, actionOpenSettings: actionOpenSettings, actionCancel: actionCancel)
         viewController?.displayCancelSchedule(viewModel: viewModel)
-     
     }
     
+    func presentCancelNotificationSchedule(response: RemovePendingNotification.Response) {
+        let viewModel = RemovePendingNotification.ViewModel()
+        viewController?.displayRemovedNotificationSchedule(viewModel: viewModel)
+    }
 }

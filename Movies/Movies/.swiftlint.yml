@@ -1,4 +1,5 @@
 disabled_rules:
   - trailing_whitespace
   - nesting
+  - identifier_name
 line_length: 150

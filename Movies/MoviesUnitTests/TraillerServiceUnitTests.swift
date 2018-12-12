@@ -11,10 +11,12 @@ import XCTest
 @testable import Movies
 
 class TrailerServiceUnitTests: XCTestCase {
-
-    let service = TrailerService()
+    
+    var service: TrailerService?
     
     override func setUp() {
+        let api: ServiceAPI = Network()
+        service = TrailerService(service: api)
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
 
@@ -26,7 +28,7 @@ class TrailerServiceUnitTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Trailer service expectation")
         let movieName = "Deadpool 2"
         
-        service.trailerUrlFor(movie: movieName) { url, serviceError in
+        service?.trailerUrlFor(movie: movieName) { url, serviceError in
             XCTAssertNil(serviceError)
             XCTAssertNotNil(url)
             expectation.fulfill()
@@ -40,7 +42,7 @@ class TrailerServiceUnitTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Trailer service expectation")
         let movieName = "Some random movie"
         
-        service.trailerUrlFor(movie: movieName) { url, serviceError in
+        service?.trailerUrlFor(movie: movieName) { url, serviceError in
             XCTAssertNil(url)
             XCTAssertNotNil(serviceError)
             XCTAssertEqual(serviceError, ServiceError.emptyResponse)
@@ -56,7 +58,7 @@ class TrailerServiceUnitTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Invalid URL expectation")
         let movieName = "Some random movie"
         
-        service.trailerUrlFor(movie: movieName) { url, serviceError in
+        service?.trailerUrlFor(movie: movieName) { url, serviceError in
             XCTAssertNil(url)
             XCTAssertNotNil(serviceError)
             XCTAssertEqual(serviceError, ServiceError.invalidUrl)
