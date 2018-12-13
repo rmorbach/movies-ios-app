@@ -74,10 +74,12 @@ struct ConfirmAddCategory {
 
 struct GetFormattedDuration {
     struct Request {
-        
+        let hoursText: String?
+        let minutesText: String?
     }
     struct Response {
-        
+        let hoursText: String?
+        let minutesText: String?
     }
     struct ViewModel {
         
@@ -86,7 +88,12 @@ struct GetFormattedDuration {
 
 struct SaveMovie {
     struct Request {
-        
+        let title: String?
+        let summary: String?
+        let imageData: Data?
+        let duration: String
+        let categories: Set<Category>
+        let rating: Double?
     }
     struct Response {
         
@@ -105,5 +112,18 @@ struct SelectPhoto {
     }
     struct ViewModel {
         
+    }
+}
+
+struct ChangeRating {
+    struct Request {
+        let value: Float
+    }
+    
+    struct Response {
+        let value: Float
+    }
+    struct ViewModel {
+        let formattedValue: String
     }
 }

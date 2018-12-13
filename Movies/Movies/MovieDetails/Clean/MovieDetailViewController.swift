@@ -147,8 +147,8 @@ class MovieDetailViewController: UIViewController {
     }
     
     private func removePendingNotification() {
-      let request = RemovePendingNotification.Request()
-      interactor?.removePendingNotification(request: request)
+        let request = RemovePendingNotification.Request()
+        interactor?.removePendingNotification(request: request)
     }
     
     private func cancelSchedule() {
@@ -169,10 +169,7 @@ class MovieDetailViewController: UIViewController {
     
     // MARK: Navigation methods
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let destVc = segue.destination as? RegisterEditMovieViewController else {
-            return
-        }
-        destVc.editingMovie = interactor?.movie
+        router?.routeToEditScreen(with: segue)
     }
     
     // MARK: IBAction methods

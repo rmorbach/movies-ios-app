@@ -23,6 +23,7 @@
 		5E18941121A8BB2900184ED6 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E18941021A8BB2900184ED6 /* SettingsView.swift */; };
 		5E1A293821C1C45900791A59 /* ServiceAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E1A293721C1C45900791A59 /* ServiceAPI.swift */; };
 		5E1A293A21C1C55A00791A59 /* HTTPMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E1A293921C1C55A00791A59 /* HTTPMethod.swift */; };
+		5E1A293D21C1D43200791A59 /* RegisterEditRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E1A293C21C1D43200791A59 /* RegisterEditRouter.swift */; };
 		5E25405B218F2CF3008A14B6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E25405A218F2CF3008A14B6 /* AppDelegate.swift */; };
 		5E25405D218F2CF3008A14B6 /* MovieDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E25405C218F2CF3008A14B6 /* MovieDetailViewController.swift */; };
 		5E254060218F2CF3008A14B6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E25405E218F2CF3008A14B6 /* Main.storyboard */; };
@@ -122,6 +123,7 @@
 		5E18941021A8BB2900184ED6 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		5E1A293721C1C45900791A59 /* ServiceAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceAPI.swift; sourceTree = "<group>"; };
 		5E1A293921C1C55A00791A59 /* HTTPMethod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPMethod.swift; sourceTree = "<group>"; };
+		5E1A293C21C1D43200791A59 /* RegisterEditRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterEditRouter.swift; sourceTree = "<group>"; };
 		5E254057218F2CF3008A14B6 /* Movies.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Movies.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E25405A218F2CF3008A14B6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5E25405C218F2CF3008A14B6 /* MovieDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieDetailViewController.swift; sourceTree = "<group>"; };
@@ -443,6 +445,7 @@
 				5E946EAD21BDDDAB007C604C /* RegisterEditInteractor.swift */,
 				5E946EAF21BDDDB5007C604C /* RegisterEditPresenter.swift */,
 				5E946EB121BDDE22007C604C /* RegisterEditModels.swift */,
+				5E1A293C21C1D43200791A59 /* RegisterEditRouter.swift */,
 			);
 			path = Clean;
 			sourceTree = "<group>";
@@ -767,6 +770,7 @@
 				5EEACA75219F846E003218ED /* UserSettingsViewController.swift in Sources */,
 				5E946EB221BDDE22007C604C /* RegisterEditModels.swift in Sources */,
 				5EEACA77219F8F92003218ED /* MoviesFileDataProvider.swift in Sources */,
+				5E1A293D21C1D43200791A59 /* RegisterEditRouter.swift in Sources */,
 				5E772C5A21B71C4900F928E7 /* MoviesListRouter.swift in Sources */,
 				5E772C6821B73C0F00F928E7 /* MovieDetailRouter.swift in Sources */,
 				5E254080218F71E3008A14B6 /* Movies.xcdatamodeld in Sources */,

@@ -11,6 +11,8 @@ import CoreData
 
 protocol RegisterEditDisplayLogic: class {
     func displayCategories(viewModel: LoadCategories.ViewModel)
+    func displaySavedMovie(viewModel: SaveMovie.ViewModel)
+    func displayChangedRating(viewModel: ChangeRating.ViewModel)
 }
 
 class RegisterEditMovieViewController: UIViewController {
@@ -22,7 +24,9 @@ class RegisterEditMovieViewController: UIViewController {
     //var categories = [Category]()
     let categoriesDataSource = CategoriesDataSource()
     
-    var interactor: (RegisterEditBusinessLogic)?
+    var interactor: (RegisterEditBusinessLogic & RegisterEditDataStore)?
+    
+    var router: (RegisterEditRoutingLogic & RegisterEditDataPassing)?
     
     lazy var hourPickerView: UIPickerView = {
         let pkv = UIPickerView()
@@ -60,6 +64,8 @@ class RegisterEditMovieViewController: UIViewController {
         self.categoriesCollectionView.dataSource = self.categoriesDataSource
         self.categoriesDataSource.delegate = self
         
+        editingMovie = interactor?.movie
+        
         if editingMovie != nil && editingMovie?.categories != nil {
             if let setCategories = editingMovie!.categories as? Set<Category> {
                 self.categoriesDataSource.selectedCategories = setCategories
@@ -69,6 +75,7 @@ class RegisterEditMovieViewController: UIViewController {
         prepareTextFields()
         loadCategories()
     }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.view.backgroundColor = UIViewController.themeColor
@@ -114,6 +121,11 @@ class RegisterEditMovieViewController: UIViewController {
         let categoriesDataProvider = CategoriesCoreDataProvider(delegate: interactor)
         interactor.worker = categoriesDataProvider
         
+        let router = RegisterEditRouter()
+        viewController.router = router
+        viewController.interactor = interactor
+        router.dataStore = interactor
+        
     }
     
     private func prepareTextFields() {
@@ -144,6 +156,7 @@ class RegisterEditMovieViewController: UIViewController {
         self.durationMinutesTextField.text = "\(minutesPickerView.selectedRow(inComponent: 0))"
         cancelSelecting()
     }
+    
     @objc func cancelSelecting() {
         view.endEditing(true)
     }
@@ -157,7 +170,6 @@ class RegisterEditMovieViewController: UIViewController {
     }
     
     private func addObservers() {
-        
         let dntfc = NotificationCenter.default
         let keyboardWillShowS = #selector(keyboardWillShow)
         let keyboardWillHideS = #selector(keyboardWillHide)
@@ -242,26 +254,19 @@ class RegisterEditMovieViewController: UIViewController {
     }
     
     private func createMovieToBeSaved() {
-        if editingMovie == nil {
-            editingMovie = Movie(context: context)
-        }
-        editingMovie?.title = self.movieTitleTextField.text
-        editingMovie?.summary = self.movieSummaryTextView.text
-        
-        if let rating = Double(currentRatingLabel.text!) {
-            editingMovie?.rating = rating
-        }
-        
+        let title = self.movieTitleTextField.text
+        let summary = self.movieSummaryTextView.text
+        var imageData: Data?
         if pictureChanged {
             if let image = coverImageView.image {
-                let imageData = image.jpegData(compressionQuality: 1.0)
-                editingMovie?.imageData = imageData
+                imageData = image.jpegData(compressionQuality: 1.0)
             }
         }
-        
-        editingMovie?.duration = getFormattedDuration()
-        
-        editingMovie?.categories = self.categoriesDataSource.selectedCategories as NSSet
+        let duration = getFormattedDuration()
+        let rating = Double(currentRatingLabel.text!)
+        let categories = self.categoriesDataSource.selectedCategories
+        let req = SaveMovie.Request(title: title, summary: summary, imageData: imageData, duration: duration, categories: categories, rating: rating)
+        interactor?.saveMovie(request: req)
     }
     
     private func isCameraAvailable() -> Bool {
@@ -274,14 +279,11 @@ class RegisterEditMovieViewController: UIViewController {
     }
     
     @IBAction func ratingChanged(_ sender: UISlider) {
-        currentRatingLabel.text = String(format: "%\(0.2)f", sender.value)
+        interactor?.changeRating(request: ChangeRating.Request(value: sender.value))
     }
     
     @IBAction func save() {
         createMovieToBeSaved()
-        saveContext()
-        
-        navigationController?.popViewController(animated: true)
     }
     
     @IBAction func selectPhoto() {
@@ -369,6 +371,17 @@ extension RegisterEditMovieViewController: RegisterEditDisplayLogic {
         DispatchQueue.main.async { [weak self] in
             self?.categoriesDataSource.categories = viewModel.categories ?? []
             self?.categoriesCollectionView.reloadData()
+        }
+    }
+
+    func displaySavedMovie(viewModel: SaveMovie.ViewModel) {
+        DispatchQueue.main.async { [weak self] in
+            self?.navigationController?.popViewController(animated: true)
+        }
+    }
+    
+    func displayChangedRating(viewModel: ChangeRating.ViewModel) {
+        DispatchQueue.main.async { [weak self] in            self?.currentRatingLabel.text = viewModel.formattedValue
         }
     }
 }
