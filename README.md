@@ -2,6 +2,8 @@
 
 A simple iOS movies application developed in [Next](http://movile.com/next) course promoted by Movile
 
+For a Clean version of this project check the [clean-architect branch](tree/clean-architecture)
+
 ## Requirements
 
 This application uses [Bundler](https://bundler.io/) for experimentation purposes.
