@@ -245,7 +245,6 @@
 			children = (
 				5E946EAC21BDDD98007C604C /* Clean */,
 				5E1893EC21A4B2D300184ED6 /* CategoriesDataSource.swift */,
-				5EC4231421925AD900913A49 /* RegisterEditMovieViewController.swift */,
 				5E1893C421A2C83600184ED6 /* CategoriesCoreDataProvider.swift */,
 			);
 			path = MoviesRegisterEdit;
@@ -450,6 +449,7 @@
 		5E946EAC21BDDD98007C604C /* Clean */ = {
 			isa = PBXGroup;
 			children = (
+				5EC4231421925AD900913A49 /* RegisterEditMovieViewController.swift */,
 				5E946EAD21BDDDAB007C604C /* RegisterEditInteractor.swift */,
 				5E946EAF21BDDDB5007C604C /* RegisterEditPresenter.swift */,
 				5E946EB121BDDE22007C604C /* RegisterEditModels.swift */,
