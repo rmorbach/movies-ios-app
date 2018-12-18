@@ -303,6 +303,7 @@
 		5E1A293B21C1CDE900791A59 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				5E25406D218F2D2F008A14B6 /* View */,
 				5E254079218F3218008A14B6 /* Protocol */,
 				5EF574B4219DC4A800F0F190 /* Extension */,
 				5EEACA7D219F98F3003218ED /* Service */,
@@ -337,12 +338,8 @@
 		5E254059218F2CF3008A14B6 /* Movies */ = {
 			isa = PBXGroup;
 			children = (
+				5E3D577321C9A92900524609 /* Scenes */,
 				5E1A293B21C1CDE900791A59 /* Shared */,
-				5E1893C021A2B93800184ED6 /* MovieDetails */,
-				5E1893BF21A2B92E00184ED6 /* MoviesRegisterEdit */,
-				5E1893BE21A2B92600184ED6 /* MoviesList */,
-				5EEACA6F219F7879003218ED /* AppSettings */,
-				5E25406D218F2D2F008A14B6 /* View */,
 				5E25406C218F2D0D008A14B6 /* Resources */,
 				5E25405A218F2CF3008A14B6 /* AppDelegate.swift */,
 			);
@@ -402,6 +399,17 @@
 				FA881722F62FBF3A64EFD3D5 /* Pods_Movies_MoviesUITests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5E3D577321C9A92900524609 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				5E1893C021A2B93800184ED6 /* MovieDetails */,
+				5E1893BF21A2B92E00184ED6 /* MoviesRegisterEdit */,
+				5E1893BE21A2B92600184ED6 /* MoviesList */,
+				5EEACA6F219F7879003218ED /* AppSettings */,
+			);
+			path = Scenes;
 			sourceTree = "<group>";
 		};
 		5E772C6121B73A6A00F928E7 /* Clean */ = {

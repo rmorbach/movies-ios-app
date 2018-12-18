@@ -21,7 +21,7 @@ class Network {
         putTask.resume()
     }
     
-    fileprivate class func get(url: URL, accept: String, completionHandler: @escaping RestCompletionBlock) {
+    fileprivate class func get(url: URL, completionHandler: @escaping RestCompletionBlock) {
         let request = NSMutableURLRequest(url: url)
         request.httpMethod = "GET"
         
@@ -30,15 +30,14 @@ class Network {
         }
     }
     
-    fileprivate class func put(url: URL, contentType: String?, accept: String, payload: Data?, completionHandler: @escaping RestCompletionBlock) {
+    fileprivate class func put(url: URL, contentType: String?, payload: Data?, completionHandler: @escaping RestCompletionBlock) {
         
         let request = NSMutableURLRequest(url: url)
         request.httpMethod = "PUT"
         if contentType != nil {
             request.setValue(contentType, forHTTPHeaderField: "Content-Type")
         }
-        
-        request.setValue(accept, forHTTPHeaderField: "Accept")
+    
         if payload != nil {
             request.httpBody = payload
         }
@@ -49,11 +48,10 @@ class Network {
         
     }
     
-    fileprivate class func post(url: URL, contentType: String?, accept: String, payload: Data?, completionHandler: @escaping RestCompletionBlock) {
+    fileprivate class func post(url: URL, contentType: String?, payload: Data?, completionHandler: @escaping RestCompletionBlock) {
         let request = NSMutableURLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue(contentType, forHTTPHeaderField: "Content-Type")
-        request.setValue(accept, forHTTPHeaderField: "Accept")
         request.httpBody = payload
         httpCall(request: request) { data, response, error in
             completionHandler(data, response as? HTTPURLResponse, error)
@@ -63,14 +61,17 @@ class Network {
 }
 
 extension Network: ServiceAPI {
-    func request(to url: URL, method: HTTPMethod, contentType: String?, accept: String, payload: Data?, completionHandler: @escaping RestCompletionBlock) {
+    func request(to url: URL, method: HTTPMethod,
+                 contentType: String?,
+                 payload: Data?,
+                 completionHandler: @escaping RestCompletionBlock) {
         switch method {
         case .get:
-            Network.get(url: url, accept: accept, completionHandler: completionHandler)
+            Network.get(url: url, completionHandler: completionHandler)
         case .post:
-            Network.post(url: url, contentType: contentType, accept: accept, payload: payload, completionHandler: completionHandler)
+            Network.post(url: url, contentType: contentType, payload: payload, completionHandler: completionHandler)
         case .put:
-            Network.put(url: url, contentType: contentType, accept: accept, payload: payload, completionHandler: completionHandler)
+            Network.put(url: url, contentType: contentType, payload: payload, completionHandler: completionHandler)
         default: break
             
         }

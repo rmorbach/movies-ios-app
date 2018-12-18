@@ -23,8 +23,7 @@ class MoviesPromoTableViewCell: UITableViewCell {
     override func prepareForReuse() {
         movies = [Movie]()
     }
-        
-    
+
 }
 
 extension MoviesPromoTableViewCell: UICollectionViewDataSource {

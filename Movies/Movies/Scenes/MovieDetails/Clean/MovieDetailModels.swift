@@ -25,7 +25,11 @@ struct Display {
         let notificationDate: Date?
         let notificationText: String?
         
-        init(coverImage: UIImage?, title: String, rating: String, categories: String, duration: String, summary: String, notificationDate: Date? = nil, notificationText: String? = nil) {
+        init(coverImage: UIImage?,
+             title: String, rating: String,
+             categories: String, duration: String,
+             summary: String, notificationDate: Date? = nil,
+             notificationText: String? = nil) {
             self.coverImage = coverImage
             self.title = title
             self.rating = rating

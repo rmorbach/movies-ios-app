@@ -41,7 +41,7 @@ class TrailerService {
         
         let method = HTTPMethod.post
         
-        service.request(to: movieUrl, method: method, contentType: nil, accept: "text/plain", payload: nil) { data, response, error in
+        service.request(to: movieUrl, method: method, contentType: nil, payload: nil) { data, response, error in
             if error != nil {
                 completion(nil, ServiceError.unknown)
                 return

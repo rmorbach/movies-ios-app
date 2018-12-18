@@ -28,7 +28,8 @@ class MovieDetailInteractor: MovieDetailBusinessLogic, MovieDetailDataStore {
     var movie: Movie?
     
     // MARK: - Private methods
-    private func checkNotificationPermission(completion: @escaping (_ success: Bool) -> Void) {        NotificationManager.shared.userHasGrantedPermission(completion: { authorized in
+    private func checkNotificationPermission(completion: @escaping (_ success: Bool) -> Void) {
+        NotificationManager.shared.userHasGrantedPermission(completion: { authorized in
         completion(authorized)
     })
         

@@ -62,7 +62,10 @@ class MovieDetailPresenter: MovieDetailPresentationLogic {
             notificationText = movie.notification!.date!.format
         }
         
-        let viewModel = Display.ViewModel(coverImage: image, title: title, rating: rating, categories: categories, duration: duration, summary: summary, notificationDate: notificationDate, notificationText: notificationText)
+        let viewModel = Display.ViewModel(coverImage: image, title: title,
+                                          rating: rating, categories: categories,
+                                          duration: duration, summary: summary,
+                                          notificationDate: notificationDate, notificationText: notificationText)
         
         self.viewController?.displayMovie(viewModel: viewModel)
         
@@ -94,7 +97,10 @@ class MovieDetailPresenter: MovieDetailPresentationLogic {
         let alertMessage = Localization.notificationDenied
         let actionOpenSettings = Localization.settings
         let actionCancel = Localization.cancel
-        let viewModel = CancelSchedule.ViewModel(alertTitle: title, alertMessage: alertMessage, actionOpenSettings: actionOpenSettings, actionCancel: actionCancel)
+        let viewModel = CancelSchedule.ViewModel(alertTitle: title,
+                                                 alertMessage: alertMessage,
+                                                 actionOpenSettings: actionOpenSettings,
+                                                 actionCancel: actionCancel)
         viewController?.displayCancelSchedule(viewModel: viewModel)
     }
     

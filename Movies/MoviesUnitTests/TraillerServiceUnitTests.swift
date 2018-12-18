@@ -55,6 +55,7 @@ class TrailerServiceUnitTests: XCTestCase {
     
     /// In order to make this test pass it is necessary to change apiBaseURL in TraillerService.swift file.
     func testServiceInvalidUrlShouldFail() {
+        
         let expectation = XCTestExpectation(description: "Invalid URL expectation")
         let movieName = "Some random movie"
         

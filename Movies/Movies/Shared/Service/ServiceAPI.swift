@@ -11,5 +11,8 @@ import Foundation
 typealias RestCompletionBlock = (Data?, HTTPURLResponse?, Error?) -> Void
 
 protocol ServiceAPI {
-    func request(to url: URL, method: HTTPMethod, contentType: String?, accept: String, payload: Data?, completionHandler: @escaping RestCompletionBlock)    
+    func request(to url: URL, method: HTTPMethod,
+                 contentType: String?,
+                 payload: Data?,
+                 completionHandler: @escaping RestCompletionBlock)    
 }
